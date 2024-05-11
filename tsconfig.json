@@ -3,15 +3,18 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "app/(tabs)/_layout.jsx",
+    "app/(tabs)/account.jsx",
+    "app/_layout.jsx",
+    "app/(tabs)/index.jsx",
+    "components/Collapsible.jsx"
   ]
 }
