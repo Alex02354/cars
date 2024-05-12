@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Image,
   StyleSheet,
-  Platform,
   View,
   Text,
   TouchableOpacity,
@@ -187,7 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFD800",
     padding: 10,
     borderRadius: 5,
-    paddingHorizontal: 35,
+    paddingHorizontal: 30,
   },
   button2: {
     alignItems: "center",

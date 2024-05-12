@@ -62,7 +62,7 @@ const EventCard = ({ item }) => {
               width: wp(8),
               height: wp(4),
               alignSelf: "flex-end",
-              flex: 1,
+              flex: 1.5,
             }}
           />
         </View>

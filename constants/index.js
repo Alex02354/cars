@@ -1,6 +1,6 @@
 export const bodyParts = [
   {
-    name: "SERBIA - BOSNIA HERZEGOVINA",
+    name: "SERBIA BOSNIA HERZEGOVINA",
     image: require("../assets/car3.png"),
     description: "off-road expedition --- (07.2024)",
     image2: require("../assets/car4.png"),
@@ -12,7 +12,7 @@ export const bodyParts = [
     image2: require("../assets/plane.png"),
   },
   {
-    name: "SERBIA - BOSNIA HERZEGOVINA ",
+    name: "SERBIA BOSNIA HERZEGOVINA ",
     image: require("../assets/car3.png"),
     description: "off-road expedition --- (07.2024)",
     image2: require("../assets/car4.png"),
@@ -24,7 +24,7 @@ export const bodyParts = [
     image2: require("../assets/plane.png"),
   },
   {
-    name: "SERBIA - BOSNIA HERZEGOVINA  ",
+    name: "SERBIA BOSNIA HERZEGOVINA  ",
     image: require("../assets/car3.png"),
     description: "off-road expedition --- (07.2024)",
     image2: require("../assets/car4.png"),
