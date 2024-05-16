@@ -12,11 +12,13 @@ const Events = () => {
       <FlatList
         data={bodyParts}
         numColumns={2}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item, index) => item.name + index}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 20, paddingTop: 10 }}
         columnWrapperStyle={{ justifyContent: "space-between", gap: 0 }}
-        renderItem={({ item }) => <EventCard item={item} />}
+        renderItem={({ item, index }) => (
+          <EventCard item={item} index={index} />
+        )}
         scrollEnabled={false} // Set scrollEnabled to false
       />
     </View>
@@ -25,7 +27,7 @@ const Events = () => {
 
 export default Events;
 
-const EventCard = ({ item }) => {
+const EventCard = ({ item, index }) => {
   return (
     <View>
       <TouchableOpacity
