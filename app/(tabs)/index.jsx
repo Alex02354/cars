@@ -13,6 +13,7 @@ import {
 } from "react-native-responsive-screen";
 import Events from "../../components/Events";
 import Entypo from "@expo/vector-icons/Entypo";
+import { useRouter } from "expo-router";
 
 const HomeScreen = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
@@ -20,7 +21,7 @@ const HomeScreen = () => {
   const handleTabPress = (tabName) => {
     setSelectedTab(tabName);
   };
-
+  const router = useRouter();
   return (
     <ScrollView
       style={{ flex: 1, flexDirection: "column", backgroundColor: "#BCBCBB" }}
@@ -61,8 +62,10 @@ const HomeScreen = () => {
         }}
       >
         <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => handleTabPress("ALL")}
+          onPress={() => {
+            handleTabPress("ALL");
+            router.push({ pathname: "/add2" });
+          }}
           style={[styles.button, selectedTab === "ALL" && styles.activeTab]}
         >
           <Text
@@ -72,8 +75,10 @@ const HomeScreen = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => handleTabPress("MIESTA")}
+          onPress={() => {
+            handleTabPress("MIESTA");
+            router.push({ pathname: "/miesta" });
+          }}
           style={[styles.button, selectedTab === "MIESTA" && styles.activeTab]}
         >
           <Text
@@ -86,8 +91,10 @@ const HomeScreen = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => handleTabPress("KEMP")}
+          onPress={() => {
+            handleTabPress("KEMP");
+            router.push({ pathname: "/kemp" });
+          }}
           style={[styles.button, selectedTab === "KEMP" && styles.activeTab]}
         >
           <Text
@@ -110,8 +117,10 @@ const HomeScreen = () => {
         }}
       >
         <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => handleTabPress("TRASY")}
+          onPress={() => {
+            handleTabPress("TRASY");
+            router.push({ pathname: "/trasy" });
+          }}
           style={[styles.button, selectedTab === "TRASY" && styles.activeTab]}
         >
           <Text
@@ -124,8 +133,10 @@ const HomeScreen = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => handleTabPress("ITINERÁR")}
+          onPress={() => {
+            handleTabPress("ITINERÁR");
+            router.push({ pathname: "/itinerar" });
+          }}
           style={[
             styles.button,
             selectedTab === "ITINERÁR" && styles.activeTab,

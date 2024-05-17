@@ -80,6 +80,46 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="add2"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="miesta"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="kemp"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="trasy"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="itinerar"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
     </Tabs>
   );
 }
