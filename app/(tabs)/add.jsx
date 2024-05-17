@@ -18,13 +18,7 @@ import Checkbox from "expo-checkbox";
 import DatePicker from "react-native-modern-datepicker";
 import { getToday, getFormatedDate } from "react-native-modern-datepicker";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { LogBox } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
-
-LogBox.ignoreLogs([
-  "Header: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.",
-  "DatePicker: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.",
-]);
 
 const Add = () => {
   const [isChecked1, setChecked1] = useState(false);
@@ -104,7 +98,6 @@ const Add = () => {
                   type="text"
                   name="Coordinates"
                   id="Coordinates"
-                  autoComplete="Coordinates"
                   style={{
                     paddingVertical: hp(1),
                     paddingHorizontal: wp(2),
@@ -138,7 +131,6 @@ const Add = () => {
                   type="text"
                   name="Access"
                   id="Access"
-                  autoComplete="Access"
                   style={{
                     paddingVertical: hp(1),
                     paddingHorizontal: wp(2),
@@ -242,7 +234,6 @@ const Add = () => {
                   type="text"
                   name="TITLE"
                   id="TITLE"
-                  autoComplete="TITLE"
                   style={{
                     paddingVertical: hp(1),
                     paddingHorizontal: wp(2),
@@ -276,7 +267,6 @@ const Add = () => {
                   type="text"
                   name="DESCRIPTION"
                   id="DESCRIPTION"
-                  autoComplete="DESCRIPTION"
                   style={{
                     paddingHorizontal: wp(2),
                     color: "black",

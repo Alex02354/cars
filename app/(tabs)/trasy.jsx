@@ -116,7 +116,6 @@ const trasy = () => {
                   type="text"
                   name="TITLE"
                   id="TITLE"
-                  autoComplete="TITLE"
                   style={{
                     paddingVertical: hp(1),
                     paddingHorizontal: wp(2),
@@ -150,7 +149,6 @@ const trasy = () => {
                   type="text"
                   name="DESCRIPTION"
                   id="DESCRIPTION"
-                  autoComplete="DESCRIPTION"
                   style={{
                     paddingHorizontal: wp(2),
                     color: "black",
@@ -243,7 +241,6 @@ const trasy = () => {
                   type="text"
                   name="Coordinates"
                   id="Coordinates"
-                  autoComplete="Coordinates"
                   style={{
                     paddingVertical: hp(1),
                     paddingHorizontal: wp(2),
@@ -277,7 +274,6 @@ const trasy = () => {
                   type="text"
                   name="Access"
                   id="Access"
-                  autoComplete="Access"
                   style={{
                     paddingVertical: hp(1),
                     paddingHorizontal: wp(2),
