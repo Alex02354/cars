@@ -15,7 +15,7 @@ const Events = () => {
         keyExtractor={(item, index) => item.name + index}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 20, paddingTop: 10 }}
-        columnWrapperStyle={{ justifyContent: "space-between", gap: 0 }}
+        columnWrapperStyle={{ justifyContent: "space-evenly" }}
         renderItem={({ item, index }) => (
           <EventCard item={item} index={index} />
         )}
@@ -38,7 +38,7 @@ const EventCard = ({ item, index }) => {
           borderWidth: 1.5,
           gap: 0,
         }}
-        className="flex justify-between p-2 mb-4 bg-white rounded-[5px]"
+        className="flex justify-evenly p-2 m-2 bg-white rounded-[5px]"
       >
         <Image
           source={item.image}
@@ -63,7 +63,6 @@ const EventCard = ({ item, index }) => {
             style={{
               width: wp(8),
               height: wp(4),
-              alignSelf: "flex-end",
               flex: 1.5,
             }}
           />

@@ -34,126 +34,137 @@ const HomeScreen = () => {
           resizeMode: "contain",
         }}
       />
-      <View style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}>
-        <Image
-          source={require("@/assets/images/car1.png")}
+      <View style={{ marginHorizontal: "11%" }}>
+        <View
+          style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
+        >
+          <Image
+            source={require("@/assets/images/car1.png")}
+            style={{
+              width: wp(45),
+              height: wp(30),
+              resizeMode: "contain",
+            }}
+          />
+          <Image
+            source={require("@/assets/images/car2.png")}
+            style={{
+              width: wp(45),
+              height: wp(30),
+              resizeMode: "contain",
+            }}
+          />
+        </View>
+        <View
           style={{
-            width: wp(45),
-            height: wp(30),
-            resizeMode: "contain",
+            alignItems: "center",
+            margin: 10,
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 10,
           }}
-        />
-        <Image
-          source={require("@/assets/images/car2.png")}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              handleTabPress("ALL");
+              router.push({ pathname: "/add2" });
+            }}
+            style={[styles.button, selectedTab === "ALL" && styles.activeTab]}
+          >
+            <Text
+              style={[
+                styles.btnText,
+                selectedTab === "ALL" && styles.activeText,
+              ]}
+            >
+              ALL
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleTabPress("MIESTA");
+              router.push({ pathname: "/miesta" });
+            }}
+            style={[
+              styles.button,
+              selectedTab === "MIESTA" && styles.activeTab,
+            ]}
+          >
+            <Text
+              style={[
+                styles.btnText,
+                selectedTab === "MIESTA" && styles.activeText,
+              ]}
+            >
+              MIESTA
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleTabPress("KEMP");
+              router.push({ pathname: "/kemp" });
+            }}
+            style={[styles.button, selectedTab === "KEMP" && styles.activeTab]}
+          >
+            <Text
+              style={[
+                styles.btnText,
+                selectedTab === "KEMP" && styles.activeText,
+              ]}
+            >
+              KEMP
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View
           style={{
-            width: wp(45),
-            height: wp(30),
-            resizeMode: "contain",
+            alignItems: "center",
+            marginBottom: 10,
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 10,
           }}
-        />
-      </View>
-      <View
-        style={{
-          alignItems: "center",
-          margin: 10,
-          flexDirection: "row",
-          justifyContent: "center",
-          gap: 10,
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            handleTabPress("ALL");
-            router.push({ pathname: "/add2" });
-          }}
-          style={[styles.button, selectedTab === "ALL" && styles.activeTab]}
         >
-          <Text
-            style={[styles.btnText, selectedTab === "ALL" && styles.activeText]}
+          <TouchableOpacity
+            onPress={() => {
+              handleTabPress("TRASY");
+              router.push({ pathname: "/trasy" });
+            }}
+            style={[styles.button, selectedTab === "TRASY" && styles.activeTab]}
           >
-            ALL
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            handleTabPress("MIESTA");
-            router.push({ pathname: "/miesta" });
-          }}
-          style={[styles.button, selectedTab === "MIESTA" && styles.activeTab]}
-        >
-          <Text
+            <Text
+              style={[
+                styles.btnText,
+                selectedTab === "TRASY" && styles.activeText,
+              ]}
+            >
+              TRASY
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleTabPress("ITINERÁR");
+              router.push({ pathname: "/itinerar" });
+            }}
             style={[
-              styles.btnText,
-              selectedTab === "MIESTA" && styles.activeText,
+              styles.button,
+              selectedTab === "ITINERÁR" && styles.activeTab,
             ]}
           >
-            MIESTA
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            handleTabPress("KEMP");
-            router.push({ pathname: "/kemp" });
-          }}
-          style={[styles.button, selectedTab === "KEMP" && styles.activeTab]}
+            <Text
+              style={[
+                styles.btnText,
+                selectedTab === "ITINERÁR" && styles.activeText,
+              ]}
+            >
+              ITINERÁR
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          className="flex-row justify-between items-center"
+          style={{ marginHorizontal: "0%", marginTop: 10 }}
         >
-          <Text
-            style={[
-              styles.btnText,
-              selectedTab === "KEMP" && styles.activeText,
-            ]}
-          >
-            KEMP
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          alignItems: "center",
-          marginBottom: 10,
-          flexDirection: "row",
-          justifyContent: "center",
-          gap: 10,
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            handleTabPress("TRASY");
-            router.push({ pathname: "/trasy" });
-          }}
-          style={[styles.button, selectedTab === "TRASY" && styles.activeTab]}
-        >
-          <Text
-            style={[
-              styles.btnText,
-              selectedTab === "TRASY" && styles.activeText,
-            ]}
-          >
-            TRASY
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            handleTabPress("ITINERÁR");
-            router.push({ pathname: "/itinerar" });
-          }}
-          style={[
-            styles.button,
-            selectedTab === "ITINERÁR" && styles.activeTab,
-          ]}
-        >
-          <Text
-            style={[
-              styles.btnText,
-              selectedTab === "ITINERÁR" && styles.activeText,
-            ]}
-          >
-            ITINERÁR
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View className="mx-10">
-        <View className="flex-row justify-between my-8 items-center mb-1">
           <Text style={[styles.btnText]}>All</Text>
           <TouchableOpacity
             activeOpacity={1}
@@ -172,7 +183,7 @@ const HomeScreen = () => {
             <Entypo name="triangle-down" size={20} color="black" />
           </TouchableOpacity>
         </View>
-        <View className="flex-1">
+        <View className="flex">
           <Events />
         </View>
       </View>

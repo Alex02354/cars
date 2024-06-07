@@ -29,7 +29,7 @@ const account = () => {
           resizeMode: "contain",
         }}
       />
-      <View className="mx-10">
+      <View style={{ marginHorizontal: "11%" }}>
         <View
           style={{
             alignItems: "center",
@@ -46,7 +46,7 @@ const account = () => {
           />
         </View>
 
-        <View className="flex-row justify-between mt-5 items-center mb-1">
+        <View className="flex-row justify-between items-center">
           <Text style={[styles.btnText]}>Výhľady</Text>
           <TouchableOpacity
             activeOpacity={1}
@@ -65,7 +65,7 @@ const account = () => {
             <Entypo name="triangle-down" size={20} color="black" />
           </TouchableOpacity>
         </View>
-        <View className="flex-1">
+        <View className="flex">
           <Events />
         </View>
       </View>

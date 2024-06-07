@@ -10,7 +10,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: "#FFD800", // Set background color to yellow
-          paddingTop: 2,
+          paddingTop: 7,
         },
       }}
     >
