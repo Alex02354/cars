@@ -5,7 +5,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
+  FlatList,
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -14,13 +14,11 @@ import {
 import Events from "../../components/Events";
 import Entypo from "@expo/vector-icons/Entypo";
 
-const account = () => {
+const Account = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
 
-  return (
-    <ScrollView
-      style={{ flex: 1, flexDirection: "column", backgroundColor: "#BCBCBB" }}
-    >
+  const renderHeader = () => (
+    <>
       <Image
         source={require("@/assets/images/header.jpg")}
         style={{
@@ -45,7 +43,6 @@ const account = () => {
             }}
           />
         </View>
-
         <View className="flex-row justify-between items-center">
           <Text style={[styles.btnText]}>Výhľady</Text>
           <TouchableOpacity
@@ -65,22 +62,35 @@ const account = () => {
             <Entypo name="triangle-down" size={20} color="black" />
           </TouchableOpacity>
         </View>
-        <View className="flex">
-          <Events />
-        </View>
       </View>
-      <View
-        style={{
-          alignItems: "center",
-          marginBottom: 50,
-          justifyContent: "center",
-        }}
-      >
-        <TouchableOpacity activeOpacity={1} style={[styles.button2]}>
-          <Text style={[styles.btnText2]}>View More</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    </>
+  );
+
+  const renderFooter = () => (
+    <View
+      style={{
+        alignItems: "center",
+        marginBottom: 50,
+        justifyContent: "center",
+      }}
+    >
+      <TouchableOpacity activeOpacity={1} style={[styles.button2]}>
+        <Text style={[styles.btnText2]}>View More</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  return (
+    <FlatList
+      data={[]} // An empty array to ensure the FlatList renders
+      keyExtractor={(item, index) => index.toString()}
+      ListHeaderComponent={renderHeader}
+      ListFooterComponent={renderFooter}
+      renderItem={null}
+      ListHeaderComponentStyle={{ flex: 1 }}
+      ListFooterComponentStyle={{ flex: 1 }}
+      ListEmptyComponent={<Events />} // Render Events here directly when there is no data
+    />
   );
 };
 
@@ -115,4 +125,4 @@ const styles = StyleSheet.create({
   activeText: { color: "#FFD800" },
 });
 
-export default account;
+export default Account;
