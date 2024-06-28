@@ -5,11 +5,14 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import AddEventModal from "./AddEventModal"; // Adjust the import path accordingly
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const fetchEvents = async () => {
     try {
@@ -28,11 +31,33 @@ const Events = () => {
     fetchEvents();
   }, []);
 
+  const addEventToList = (newEvent) => {
+    setEvents([newEvent, ...events]);
+  };
+
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error}</Text>;
 
   return (
     <View style={{ flex: 1 }}>
+      <TouchableOpacity
+        style={{
+          backgroundColor: "#FFD800",
+          marginHorizontal: 40,
+          padding: 10,
+          borderRadius: 5,
+          margin: 15,
+          alignItems: "center",
+          flexDirection: "row",
+          flex: 1,
+          justifyContent: "center",
+          gap: 15,
+        }}
+        onPress={() => setModalVisible(true)}
+      >
+        <MaterialIcons name="add-circle-outline" size={24} color="black" />
+        <Text style={{ color: "black", fontWeight: "bold" }}>Add Event</Text>
+      </TouchableOpacity>
       <FlatList
         data={events}
         numColumns={2}
@@ -44,6 +69,11 @@ const Events = () => {
           <EventCard item={item} index={index} />
         )}
       />
+      <AddEventModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        addEventToList={addEventToList}
+      />
     </View>
   );
 };
@@ -51,16 +81,17 @@ const Events = () => {
 const EventCard = ({ item, index }) => {
   return (
     <TouchableOpacity
-      activeOpacity={1}
+      activeOpacity={0.5}
       style={{
         width: wp(38),
-        height: wp(49),
+        height: wp(60),
         borderWidth: 1.5,
         gap: 0,
         margin: 5, // Add margin to separate cards
         padding: 5, // Add padding inside the card
         backgroundColor: "white", // Add background color to the card
         borderRadius: 5, // Add border radius to the card
+        justifyContent: "space-between",
       }}
     >
       <Image

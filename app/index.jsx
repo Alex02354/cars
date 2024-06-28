@@ -14,7 +14,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice";
-//import OAuth from "../../components/OAuth";
+//import OAuth from "../components/OAuth";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -74,7 +74,7 @@ export default function SignIn() {
           <Text style={styles.buttonText}>Sign In</Text>
         )}
       </TouchableOpacity>
-      {/*    <OAuth /> */}
+      {/* <OAuth /> */}
       <View style={styles.footer}>
         <Text>Don't have an account?</Text>
         <TouchableOpacity onPress={() => router.push("/auth/SignUp")}>

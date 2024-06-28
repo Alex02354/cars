@@ -52,7 +52,10 @@ const miesta = () => {
 
   return (
     <ScrollView
-      style={{ flex: 1, flexDirection: "column", backgroundColor: "#BCBCBB" }}
+      style={{
+        flex: 1,
+        flexDirection: "column" /* backgroundColor: "#BCBCBB" */,
+      }}
     >
       <Image
         source={require("@/assets/images/header.jpg")}

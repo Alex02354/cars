@@ -13,14 +13,17 @@ import {
 } from "react-native-responsive-screen";
 import Events from "../../components/Events";
 import Entypo from "@expo/vector-icons/Entypo";
+import AddEventModal from "../../components/AddEventModal"; // Adjust the path as per your project structure
 import { useRouter } from "expo-router";
 
 const HomeScreen = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleTabPress = (tabName) => {
     setSelectedTab(tabName);
   };
+
   const router = useRouter();
 
   const renderHeader = () => (
@@ -66,7 +69,6 @@ const HomeScreen = () => {
           <TouchableOpacity
             onPress={() => {
               handleTabPress("ALL");
-              router.push({ pathname: "/add2" });
             }}
             style={[styles.button, selectedTab === "ALL" && styles.activeTab]}
           >
@@ -163,9 +165,25 @@ const HomeScreen = () => {
         <View
           className="flex-row justify-between items-center"
           style={{ marginHorizontal: "0%", marginTop: 10 }}
+        ></View>
+        <View
+          style={{
+            alignItems: "center",
+            marginBottom: 10,
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 10,
+          }}
+        >
+          {/* Render other tab buttons as needed */}
+        </View>
+        <View
+          className="flex-row justify-between items-center"
+          style={{ marginHorizontal: "0%", marginTop: 10 }}
         >
           <Text style={[styles.btnText]}>All</Text>
           <TouchableOpacity
+            onPress={() => setModalVisible(true)}
             activeOpacity={1}
             style={[styles.button]}
             className="flex-row px-6"
@@ -201,16 +219,22 @@ const HomeScreen = () => {
   );
 
   return (
-    <FlatList
-      data={[]} // An empty array to ensure the FlatList renders
-      keyExtractor={(item, index) => index.toString()}
-      ListHeaderComponent={renderHeader}
-      ListFooterComponent={renderFooter}
-      renderItem={null}
-      ListHeaderComponentStyle={{ flex: 1 }}
-      ListFooterComponentStyle={{ flex: 1 }}
-      ListEmptyComponent={<Events />} // Render Events here directly when there is no data
-    />
+    <View style={{ flex: 1 }}>
+      <FlatList
+        data={[]} // An empty array to ensure the FlatList renders
+        keyExtractor={(item, index) => index.toString()}
+        ListHeaderComponent={renderHeader}
+        ListFooterComponent={renderFooter}
+        renderItem={null}
+        ListHeaderComponentStyle={{ flex: 1 }}
+        ListFooterComponentStyle={{ flex: 1 }}
+        ListEmptyComponent={<Events />} // Render Events here directly when there is no data
+      />
+      <AddEventModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+    </View>
   );
 };
 

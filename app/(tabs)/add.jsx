@@ -55,7 +55,10 @@ const Add = () => {
 
   return (
     <ScrollView
-      style={{ flex: 1, flexDirection: "column", backgroundColor: "#BCBCBB" }}
+      style={{
+        flex: 1,
+        flexDirection: "column" /* backgroundColor: "#BCBCBB" */,
+      }}
     >
       <SafeAreaView>
         <View style={{ marginHorizontal: wp(5), marginTop: hp(5) }}>

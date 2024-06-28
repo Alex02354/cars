@@ -74,7 +74,7 @@ export default function SignUp() {
           <Text style={styles.buttonText}>Sign Up</Text>
         )}
       </TouchableOpacity>
-      {/*       <OAuth /> */}
+      {/* <OAuth /> */}
       <View style={styles.footer}>
         <Text>Have an account?</Text>
         <TouchableOpacity onPress={() => router.push("/")}>
