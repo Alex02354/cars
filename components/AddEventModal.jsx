@@ -6,10 +6,14 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Picker } from "@react-native-picker/picker";
 
 const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
   const [eventData, setEventData] = useState({
@@ -20,7 +24,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
     coordinates: "",
     access: 0,
     date: "", // Date will be stored as a string
-    section: "",
+    section: "kemp",
   });
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,11 +39,14 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      const response = await axios.post("http://192.168.1.30:3000/events", {
-        ...eventData,
-        coordinates: eventData.coordinates.split(",").map(Number),
-        user, // Include the user in the event data
-      });
+      const response = await axios.post(
+        "https://moto-app.onrender.com/events",
+        {
+          ...eventData,
+          coordinates: eventData.coordinates.split(",").map(Number),
+          user, // Include the user in the event data
+        }
+      );
       addEventToList(response.data.data); // Add new event to the list
       setModalVisible(false);
       setEventData({
@@ -50,7 +57,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
         coordinates: "",
         access: 0,
         date: "",
-        section: "",
+        section: "kemp",
       }); // Clear form data
       // Optionally, you can trigger a callback or update state in parent component upon successful submission
     } catch (err) {
@@ -74,6 +81,19 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
     hideDatePicker();
   };
 
+  const handleClear = () => {
+    setEventData({
+      title: "",
+      description: "",
+      image: "",
+      map: "",
+      coordinates: "",
+      access: 0,
+      date: "",
+      section: "kemp",
+    });
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -83,82 +103,106 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
         setModalVisible(false);
       }}
     >
-      <View style={styles.centeredView}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.centeredView}
+      >
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Add New Event</Text>
-          {error && <Text style={styles.errorText}>{error}</Text>}
-          <TextInput
-            style={styles.input}
-            placeholder="Title"
-            value={eventData.title}
-            onChangeText={(text) => handleChange("title", text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Description"
-            value={eventData.description}
-            onChangeText={(text) => handleChange("description", text)}
-            multiline
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Image URL"
-            value={eventData.image}
-            onChangeText={(text) => handleChange("image", text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Map URL"
-            value={eventData.map}
-            onChangeText={(text) => handleChange("map", text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Coordinates (comma-separated)"
-            value={eventData.coordinates}
-            onChangeText={(text) => handleChange("coordinates", text)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Access Level"
-            value={eventData.access.toString()}
-            onChangeText={(text) => handleChange("access", parseInt(text))}
-            keyboardType="numeric"
-          />
-          <TouchableOpacity style={styles.input} onPress={showDatePicker}>
-            <Text>
-              {eventData.date ? eventData.date.toString() : "Select Date"}
-            </Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="datetime"
-            onConfirm={handleConfirmDate}
-            onCancel={hideDatePicker}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Section"
-            value={eventData.section}
-            onChangeText={(text) => handleChange("section", text)}
-          />
-          <TouchableOpacity
-            style={[styles.button, styles.submitButton]}
-            onPress={handleSubmit}
-            disabled={isSubmitting}
-          >
-            <Text style={styles.buttonText}>
-              {isSubmitting ? "Loading..." : "Submit"}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, styles.closeButton]}
-            onPress={() => setModalVisible(false)}
-          >
-            <Text style={styles.buttonText}>Close</Text>
-          </TouchableOpacity>
+          <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <Text style={styles.modalText}>Add New Event</Text>
+            {error && <Text style={styles.errorText}>{error}</Text>}
+            <TextInput
+              style={styles.input}
+              placeholder="Title"
+              value={eventData.title}
+              onChangeText={(text) => handleChange("title", text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Description"
+              value={eventData.description}
+              onChangeText={(text) => handleChange("description", text)}
+              multiline
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Image URL"
+              value={eventData.image}
+              onChangeText={(text) => handleChange("image", text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Map URL"
+              value={eventData.map}
+              onChangeText={(text) => handleChange("map", text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Coordinates (comma-separated)"
+              value={eventData.coordinates}
+              onChangeText={(text) => handleChange("coordinates", text)}
+            />
+            <TouchableOpacity style={styles.input} onPress={showDatePicker}>
+              <Text>
+                {eventData.date ? eventData.date.toString() : "Select Date"}
+              </Text>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="datetime"
+              onConfirm={handleConfirmDate}
+              onCancel={hideDatePicker}
+            />
+            <View style={styles.pickerContainer}>
+              <Text style={styles.pickerLabel}>Access Level:</Text>
+              <Picker
+                selectedValue={eventData.access}
+                style={styles.picker}
+                onValueChange={(itemValue) => handleChange("access", itemValue)}
+              >
+                <Picker.Item label="Plane" value={0} />
+                <Picker.Item label="Car" value={1} />
+              </Picker>
+            </View>
+
+            <View style={styles.pickerContainer}>
+              <Text style={styles.pickerLabel}>Section:</Text>
+              <Picker
+                selectedValue={eventData.section}
+                style={styles.picker}
+                onValueChange={(itemValue) =>
+                  handleChange("section", itemValue)
+                }
+              >
+                <Picker.Item label="kemp" value="kemp" />
+                <Picker.Item label="places" value="places" />
+                <Picker.Item label="itinerary" value="itinerary" />
+              </Picker>
+            </View>
+            <TouchableOpacity
+              style={[styles.button, styles.submitButton]}
+              onPress={handleSubmit}
+              disabled={isSubmitting}
+            >
+              <Text style={styles.buttonText}>
+                {isSubmitting ? "Loading..." : "Submit"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.clearButton]}
+              onPress={handleClear}
+            >
+              <Text style={styles.buttonText}>Clear</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.closeButton]}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
@@ -178,6 +222,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 5,
     width: "90%", // Adjusted to be almost full-width
+    maxHeight: "90%", // Added to prevent modal from taking more than the available screen height
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "center",
   },
   modalText: {
     marginBottom: 15,
@@ -194,19 +243,35 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 1,
     padding: 10,
-    marginBottom: 10,
+    marginBottom: 8, // Reduced margin bottom to make fields wider
     borderRadius: 5,
-    paddingHorizontal: 15, // Add horizontal padding for a better look
-    marginHorizontal: 5, // Add a bit of margin to the sides
+  },
+  pickerContainer: {
+    width: "100%",
+    marginBottom: 8, // Reduced margin bottom to make fields wider
+  },
+  pickerLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  picker: {
+    width: "100%",
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
   },
   button: {
     width: "100%",
     padding: 10,
     borderRadius: 5,
-    marginTop: 10,
+    marginTop: 8, // Reduced margin top to make fields wider
   },
   submitButton: {
     backgroundColor: "#FFD800",
+  },
+  clearButton: {
+    backgroundColor: "#CCCCCC",
   },
   closeButton: {
     backgroundColor: "#FF6666",

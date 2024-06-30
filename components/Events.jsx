@@ -7,6 +7,7 @@ import {
 } from "react-native-responsive-screen";
 import AddEventModal from "./AddEventModal"; // Adjust the import path accordingly
 import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -17,7 +18,7 @@ const Events = () => {
   const fetchEvents = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.1.30:3000/events" // Replace with your local IP address
+        "https://moto-app.onrender.com/events" // Replace with your local IP address
       );
       setEvents(response.data.data);
     } catch (err) {
@@ -43,7 +44,7 @@ const Events = () => {
       <TouchableOpacity
         style={{
           backgroundColor: "#FFD800",
-          marginHorizontal: 40,
+          marginHorizontal: "11%",
           padding: 10,
           borderRadius: 5,
           margin: 15,
@@ -84,9 +85,9 @@ const EventCard = ({ item, index }) => {
       activeOpacity={0.5}
       style={{
         width: wp(38),
-        height: wp(60),
+        height: wp(63),
         borderWidth: 1.5,
-        gap: 0,
+        gap: 1,
         margin: 5, // Add margin to separate cards
         padding: 5, // Add padding inside the card
         backgroundColor: "white", // Add background color to the card
@@ -111,23 +112,25 @@ const EventCard = ({ item, index }) => {
           marginVertical: 5,
         }}
       >
-        <Text style={{ fontSize: hp(1.6), fontWeight: "bold" }}>
-          {item.title}
-        </Text>
-        <Image
-          source={{ uri: item.image }}
-          resizeMode="contain"
-          style={{
-            width: wp(8),
-            height: wp(4),
-          }}
-        />
+        <View style={{ width: wp(30), height: wp(8) }}>
+          <Text style={{ fontSize: hp(1.6), fontWeight: "bold" }}>
+            {item.title}
+          </Text>
+        </View>
+        {item.access === 0 ? (
+          <Ionicons name="airplane-outline" size={wp(5)} color="black" />
+        ) : (
+          <Ionicons name="car-outline" size={wp(5)} color="black" />
+        )}
       </View>
       <Text style={{ fontSize: hp(1.3), fontWeight: "semibold" }}>
         {item.description}
       </Text>
       <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
         Date: {item.date}
+      </Text>
+      <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
+        Section: {item.section}
       </Text>
       <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
         Created by: {item.user.currentUser.username}

@@ -28,24 +28,42 @@ export default function SignIn() {
   };
 
   const handleSubmit = async () => {
-    try {
-      dispatch(signInStart());
-      const res = await fetch("http://192.168.1.30:3000/api/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(signInFailure(data));
-        return;
+    const timeout = new Promise(
+      (_, reject) =>
+        setTimeout(() => reject(new Error("Request timed out")), 60000) // 1 minute timeout
+    );
+
+    const signInRequest = async () => {
+      try {
+        dispatch(signInStart());
+        const res = await fetch(
+          "https://moto-app.onrender.com/api/auth/signin",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          dispatch(signInFailure(data));
+          console.error("Error:", data);
+          return;
+        }
+        dispatch(signInSuccess(data));
+        router.push("/(tabs)");
+      } catch (error) {
+        dispatch(signInFailure(error));
+        console.error("Error:", error);
       }
-      dispatch(signInSuccess(data));
-      router.push("/(tabs)");
+    };
+
+    try {
+      await Promise.race([signInRequest(), timeout]);
     } catch (error) {
-      dispatch(signInFailure(error));
+      dispatch(signInFailure({ message: error.message }));
     }
   };
 
