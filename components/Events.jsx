@@ -85,7 +85,7 @@ const EventCard = ({ item, index }) => {
       activeOpacity={0.5}
       style={{
         width: wp(38),
-        height: wp(63),
+        height: wp(64),
         borderWidth: 1.5,
         gap: 1,
         margin: 5, // Add margin to separate cards
