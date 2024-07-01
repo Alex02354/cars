@@ -28,19 +28,14 @@ export default function TabLayout() {
         }}
       />
 
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="add"
         options={{
-          title: "",
-          tabBarIcon: ({ size, focused }) => (
-            <TabBarIcon
-              name={focused ? "add-circle" : "add-circle-outline"}
-              color={"black"}
-              size={size}
-            />
-          ),
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
         }}
-      /> */}
+      />
       <Tabs.Screen
         name="compass"
         options={{

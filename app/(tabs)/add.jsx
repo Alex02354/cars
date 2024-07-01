@@ -1,4 +1,4 @@
-/* import {
+import {
   View,
   Text,
   Image,
@@ -57,7 +57,7 @@ const Add = () => {
     <ScrollView
       style={{
         flex: 1,
-        flexDirection: "column" /* backgroundColor: "#BCBCBB" */ /*,
+        flexDirection: "column" /* backgroundColor: "#BCBCBB" */,
       }}
     >
       <SafeAreaView>
@@ -473,4 +473,3 @@ const styles = StyleSheet.create({
   },
 });
 export default Add;
- */
