@@ -14,7 +14,7 @@
     "app/(tabs)/_layout.jsx",
     "app/(tabs)/account.jsx",
     "app/_layout.jsx",
-    "app/(tabs)/index.jsx",
+    "app/(tabs)/(home)/index.jsx",
     "components/Collapsible.jsx"
   ]
 }

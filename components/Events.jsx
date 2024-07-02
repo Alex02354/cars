@@ -8,6 +8,15 @@ import {
 import AddEventModal from "./AddEventModal"; // Adjust the import path accordingly
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+
+// Mapping of country names to actual image paths
+const countryImages = {
+  Slovakia: require("../assets/images/slovakia.jpg"),
+  France: require("../assets/images/france.jpg"),
+  "Czech Republic": require("../assets/images/cz.jpg"),
+  Italy: require("../assets/images/italy.jpg"),
+};
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -80,62 +89,80 @@ const Events = () => {
 };
 
 const EventCard = ({ item, index }) => {
+  const countryImage = countryImages[item.country]; // Get the country image path based on the country
+
   return (
-    <TouchableOpacity
-      activeOpacity={0.5}
-      style={{
-        width: wp(38),
-        height: wp(64),
-        borderWidth: 1.5,
-        gap: 1,
-        margin: 5, // Add margin to separate cards
-        padding: 5, // Add padding inside the card
-        backgroundColor: "white", // Add background color to the card
-        borderRadius: 5, // Add border radius to the card
-        justifyContent: "space-between",
-      }}
-    >
-      <Image
-        source={{ uri: item.image }}
-        resizeMode="cover"
+    <Link href={`/${item._id}`} asChild>
+      <TouchableOpacity
+        activeOpacity={0.5}
         style={{
-          width: wp(28),
-          height: wp(20),
-          alignSelf: "center",
-          borderRadius: 10, // Add border radius to the image
-        }}
-      />
-      <View
-        style={{
-          flexDirection: "row",
+          width: wp(38),
+          height: wp(64),
+          borderWidth: 1.5,
+          gap: 1,
+          margin: 5, // Add margin to separate cards
+          padding: 5, // Add padding inside the card
+          backgroundColor: "white", // Add background color to the card
+          borderRadius: 5, // Add border radius to the card
           justifyContent: "space-between",
-          marginVertical: 5,
         }}
       >
-        <View style={{ width: wp(30), height: wp(8) }}>
-          <Text style={{ fontSize: hp(1.6), fontWeight: "bold" }}>
-            {item.title}
-          </Text>
+        <Image
+          source={{ uri: item.image }}
+          resizeMode="cover"
+          style={{
+            width: wp(28),
+            height: wp(20),
+            alignSelf: "center",
+            borderRadius: 10, // Add border radius to the image
+          }}
+        />
+        {/*         <Image
+          source={countryImage} // Display the country image
+          resizeMode="cover"
+          style={{
+            width: wp(28),
+            height: wp(20),
+            alignSelf: "center",
+            borderRadius: 4, // Add border radius to the country image
+            marginVertical: 1,
+          }}
+        /> */}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginVertical: 2,
+          }}
+        >
+          <View style={{ width: wp(30), height: wp(8) }}>
+            <Text style={{ fontSize: hp(1.6), fontWeight: "bold" }}>
+              {item.title}
+            </Text>
+          </View>
+          {item.access === 0 ? (
+            <Ionicons name="airplane-outline" size={wp(5)} color="black" />
+          ) : (
+            <Ionicons name="car-outline" size={wp(5)} color="black" />
+          )}
         </View>
-        {item.access === 0 ? (
-          <Ionicons name="airplane-outline" size={wp(5)} color="black" />
-        ) : (
-          <Ionicons name="car-outline" size={wp(5)} color="black" />
-        )}
-      </View>
-      <Text style={{ fontSize: hp(1.3), fontWeight: "semibold" }}>
-        {item.description}
-      </Text>
-      <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
-        Date: {item.date}
-      </Text>
-      <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
-        Section: {item.section}
-      </Text>
-      <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
-        Created by: {item.user.currentUser.username}
-      </Text>
-    </TouchableOpacity>
+        <Text style={{ fontSize: hp(1.3), fontWeight: "semibold" }}>
+          {item.description}
+        </Text>
+        <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
+          Date: {item.date}
+        </Text>
+        <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
+          ID: {item._id}
+        </Text>
+        <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
+          Section: {item.section}
+        </Text>
+        <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
+          Created by: {item.user.currentUser.username}
+        </Text>
+      </TouchableOpacity>
+    </Link>
   );
 };
 

@@ -30,7 +30,7 @@ export default function SignIn() {
   const handleSubmit = async () => {
     const timeout = new Promise(
       (_, reject) =>
-        setTimeout(() => reject(new Error("Request timed out")), 60000) // 1 minute timeout
+        setTimeout(() => reject(new Error("Request timed out")), 120000) // 1 minute timeout
     );
 
     const signInRequest = async () => {

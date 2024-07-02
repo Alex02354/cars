@@ -11,10 +11,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import Events from "../../components/Events";
+import Events from "../../../components/Events";
 import Entypo from "@expo/vector-icons/Entypo";
-import AddEventModal from "../../components/AddEventModal"; // Adjust the path as per your project structure
+import AddEventModal from "../../../components/AddEventModal"; // Adjust the path as per your project structure
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 const HomeScreen = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
@@ -34,6 +35,7 @@ const HomeScreen = () => {
           width: wp(100),
           height: wp(37),
           resizeMode: "contain",
+          marginTop: wp(6),
         }}
       />
       <View style={{ marginHorizontal: "11%" }}>
@@ -201,6 +203,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <StatusBar style="auto" />
     </>
   );
 

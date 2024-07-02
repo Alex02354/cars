@@ -1,3 +1,4 @@
+// AddEventModal.jsx
 import React, { useState } from "react";
 import {
   Modal,
@@ -16,6 +17,13 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from "@react-native-picker/picker";
 
 const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
+  const countries = [
+    { name: "Slovakia" },
+    { name: "France" },
+    { name: "Czech Republic" },
+    { name: "Italy" },
+  ];
+
   const [eventData, setEventData] = useState({
     title: "",
     description: "",
@@ -25,7 +33,10 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
     access: 0,
     date: "", // Date will be stored as a string
     section: "kemp",
+    country: countries[0].name, // Default to Slovakia
+    favourite: false, // Default favourite to false
   });
+
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -36,9 +47,14 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
     setEventData({ ...eventData, [name]: value });
   };
 
+  const handleCountryChange = (country) => {
+    setEventData({ ...eventData, country });
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
+      console.log("Submitting event data:", eventData); // Log event data before submission
       const response = await axios.post(
         "https://moto-app.onrender.com/events",
         {
@@ -58,8 +74,9 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
         access: 0,
         date: "",
         section: "kemp",
-      }); // Clear form data
-      // Optionally, you can trigger a callback or update state in parent component upon successful submission
+        country: countries[0].name, // Reset to Slovakia
+        favourite: false, // Reset favourite to false
+      }); // Clear form data and reset to default country
     } catch (err) {
       setError(err.message);
     } finally {
@@ -91,6 +108,8 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
       access: 0,
       date: "",
       section: "kemp",
+      country: countries[0].name, // Reset to Slovakia
+      favourite: false, // Reset favourite to false
     });
   };
 
@@ -179,6 +198,24 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
                 <Picker.Item label="itinerary" value="itinerary" />
               </Picker>
             </View>
+
+            <View style={styles.pickerContainer}>
+              <Text style={styles.pickerLabel}>Country:</Text>
+              <Picker
+                selectedValue={eventData.country}
+                style={styles.picker}
+                onValueChange={(itemValue) => handleCountryChange(itemValue)}
+              >
+                {countries.map((country) => (
+                  <Picker.Item
+                    key={country.name}
+                    label={country.name}
+                    value={country.name}
+                  />
+                ))}
+              </Picker>
+            </View>
+
             <TouchableOpacity
               style={[styles.button, styles.submitButton]}
               onPress={handleSubmit}
