@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import axios from "axios";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useSelector } from "react-redux";
 
 const EventDetail = () => {
-  const router = useRouter();
   const { _id } = useLocalSearchParams();
   const [event, setEvent] = useState(null);
   const [error, setError] = useState(null);
@@ -23,7 +14,7 @@ const EventDetail = () => {
     const fetchEvent = async () => {
       try {
         const response = await axios.get(
-          `https://moto-app.onrender.com/events/${_id}`
+          `https://moto-app.onrender.com/api/events/${_id}`
         );
         setEvent(response.data.data);
       } catch (error) {
@@ -36,24 +27,6 @@ const EventDetail = () => {
       fetchEvent();
     }
   }, [_id]);
-
-  const toggleFavourite = async () => {
-    try {
-      const updatedEvent = {
-        ...event,
-        favourite: !event.favourite,
-        user: { currentUser: user },
-      };
-      const response = await axios.put(
-        `https://moto-app.onrender.com/events/${event._id}`,
-        updatedEvent
-      );
-      setEvent(response.data.data);
-    } catch (error) {
-      console.error("Error updating favourite status:", error);
-      setError(error.message);
-    }
-  };
 
   if (error) {
     return <Text>Error: {error}</Text>;
@@ -68,16 +41,7 @@ const EventDetail = () => {
       <Text style={styles.title}>{event.title}</Text>
       <Image source={{ uri: event.image }} style={styles.image} />
       <Text style={styles.description}>{event.description}</Text>
-      <TouchableOpacity
-        style={styles.favouriteButton}
-        onPress={toggleFavourite}
-      >
-        <FontAwesome
-          name={event.favourite ? "heart" : "heart-o"}
-          size={32}
-          color={event.favourite ? "red" : "gray"}
-        />
-      </TouchableOpacity>
+      {event.map && <Image source={{ uri: event.map }} style={styles.map} />}
     </ScrollView>
   );
 };
@@ -104,7 +68,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
-  favouriteButton: {
+  map: {
+    width: "100%",
+    height: 200,
+    borderRadius: 10,
     marginTop: 20,
   },
 });

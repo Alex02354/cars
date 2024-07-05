@@ -13,9 +13,11 @@ import {
 } from "react-native-responsive-screen";
 import Events from "../../components/Events";
 import Entypo from "@expo/vector-icons/Entypo";
+import { useSelector } from "react-redux";
 
 const Account = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
+  const user = useSelector((state) => state.user.currentUser); // Replace with the actual path to the user in your Redux state
 
   const renderHeader = () => (
     <>
@@ -44,23 +46,7 @@ const Account = () => {
           />
         </View>
         <View className="flex-row justify-between items-center">
-          <Text style={[styles.btnText]}>Výhľady</Text>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={[styles.button]}
-            className="flex-row px-6"
-          >
-            <Text
-              style={[
-                styles.btnText,
-                selectedTab === "Filter" && styles.activeText,
-              ]}
-              className="mr-5"
-            >
-              Filter
-            </Text>
-            <Entypo name="triangle-down" size={20} color="black" />
-          </TouchableOpacity>
+          <Text style={[styles.btnText]}>My profile</Text>
         </View>
       </View>
     </>
@@ -89,7 +75,9 @@ const Account = () => {
       renderItem={null}
       ListHeaderComponentStyle={{ flex: 1 }}
       ListFooterComponentStyle={{ flex: 1 }}
-      ListEmptyComponent={<Events />} // Render Events here directly when there is no data
+      ListEmptyComponent={
+        <Events currentUserId={user._id} showAddEventButton={false} />
+      } // Pass the current user ID to the Events component
     />
   );
 };

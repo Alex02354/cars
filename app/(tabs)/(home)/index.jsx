@@ -12,7 +12,6 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Events from "../../../components/Events";
-import Entypo from "@expo/vector-icons/Entypo";
 import AddEventModal from "../../../components/AddEventModal"; // Adjust the path as per your project structure
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -35,7 +34,6 @@ const HomeScreen = () => {
           width: wp(100),
           height: wp(37),
           resizeMode: "contain",
-          marginTop: wp(6),
         }}
       />
       <View style={{ marginHorizontal: "11%" }}>
@@ -179,7 +177,7 @@ const HomeScreen = () => {
         >
           {/* Render other tab buttons as needed */}
         </View>
-        <View
+        {/* <View
           className="flex-row justify-between items-center"
           style={{ marginHorizontal: "0%", marginTop: 10 }}
         >
@@ -201,7 +199,7 @@ const HomeScreen = () => {
             </Text>
             <Entypo name="triangle-down" size={20} color="black" />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
       <StatusBar style="auto" />
     </>
@@ -231,7 +229,7 @@ const HomeScreen = () => {
         renderItem={null}
         ListHeaderComponentStyle={{ flex: 1 }}
         ListFooterComponentStyle={{ flex: 1 }}
-        ListEmptyComponent={<Events />} // Render Events here directly when there is no data
+        ListEmptyComponent={<Events showAddEventButton={true} />} // Render Events here directly when there is no data
       />
       <AddEventModal
         modalVisible={modalVisible}

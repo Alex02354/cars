@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Modal,
+  StyleSheet,
+} from "react-native";
 import axios from "axios";
 import {
   widthPercentageToDP as wp,
@@ -18,18 +26,28 @@ const countryImages = {
   Italy: require("../assets/images/italy.jpg"),
 };
 
-const Events = () => {
+const Events = ({ currentUserId, showAddEventButton }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
   const fetchEvents = async () => {
     try {
       const response = await axios.get(
-        "https://moto-app.onrender.com/events" // Replace with your local IP address
+        "https://moto-app.onrender.com/api/events" // Replace with your local IP address
       );
-      setEvents(response.data.data);
+      let allEvents = response.data.data;
+
+      if (currentUserId) {
+        allEvents = allEvents.filter(
+          (event) => event.user.currentUser._id === currentUserId
+        );
+      }
+
+      setEvents(allEvents);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -39,37 +57,88 @@ const Events = () => {
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [currentUserId]);
 
   const addEventToList = (newEvent) => {
     setEvents([newEvent, ...events]);
   };
+
+  const handleCountrySelect = (country) => {
+    setSelectedCountry(country);
+    setFilterModalVisible(false);
+  };
+
+  const filteredEvents = selectedCountry
+    ? events.filter((event) => event.country === selectedCountry)
+    : events;
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error}</Text>;
 
   return (
     <View style={{ flex: 1 }}>
-      <TouchableOpacity
+      <View
         style={{
-          backgroundColor: "#FFD800",
-          marginHorizontal: "11%",
-          padding: 10,
-          borderRadius: 5,
-          margin: 15,
-          alignItems: "center",
           flexDirection: "row",
-          flex: 1,
-          justifyContent: "center",
-          gap: 15,
+          justifyContent: "space-between",
+          marginHorizontal: "11%",
         }}
-        onPress={() => setModalVisible(true)}
       >
-        <MaterialIcons name="add-circle-outline" size={24} color="black" />
-        <Text style={{ color: "black", fontWeight: "bold" }}>Add Event</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#FFD800",
+            padding: 10,
+            borderRadius: 5,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 15,
+            flex: 1,
+            marginRight: 5,
+          }}
+          onPress={() => handleCountrySelect(null)}
+        >
+          <Text style={{ color: "black", fontWeight: "bold" }}>All</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#FFD800",
+            padding: 10,
+            borderRadius: 5,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 15,
+            flex: 1,
+            marginLeft: 5,
+          }}
+          onPress={() => setFilterModalVisible(true)}
+        >
+          <Text style={{ color: "black", fontWeight: "bold" }}>Filter</Text>
+          <Ionicons name="filter" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+      {showAddEventButton && (
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#FFD800",
+            marginHorizontal: "11%",
+            padding: 10,
+            borderRadius: 5,
+            margin: 15,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 15,
+          }}
+          onPress={() => setModalVisible(true)}
+        >
+          <MaterialIcons name="add-circle-outline" size={24} color="black" />
+          <Text style={{ color: "black", fontWeight: "bold" }}>Add Event</Text>
+        </TouchableOpacity>
+      )}
       <FlatList
-        data={events}
+        data={filteredEvents}
         numColumns={2}
         keyExtractor={(item, index) => item._id + index}
         showsVerticalScrollIndicator={false}
@@ -84,6 +153,38 @@ const Events = () => {
         setModalVisible={setModalVisible}
         addEventToList={addEventToList}
       />
+      <Modal
+        transparent={true}
+        visible={filterModalVisible}
+        animationType="slide"
+        onRequestClose={() => setFilterModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Select Country</Text>
+            <TouchableOpacity onPress={() => handleCountrySelect(null)}>
+              <Text style={styles.modalItem}>All</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleCountrySelect("Slovakia")}>
+              <Text style={styles.modalItem}>Slovakia</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleCountrySelect("France")}>
+              <Text style={styles.modalItem}>France</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleCountrySelect("Czech Republic")}
+            >
+              <Text style={styles.modalItem}>Czech Republic</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleCountrySelect("Italy")}>
+              <Text style={styles.modalItem}>Italy</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setFilterModalVisible(false)}>
+              <Text style={styles.modalCancel}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -117,17 +218,6 @@ const EventCard = ({ item, index }) => {
             borderRadius: 10, // Add border radius to the image
           }}
         />
-        {/*         <Image
-          source={countryImage} // Display the country image
-          resizeMode="cover"
-          style={{
-            width: wp(28),
-            height: wp(20),
-            alignSelf: "center",
-            borderRadius: 4, // Add border radius to the country image
-            marginVertical: 1,
-          }}
-        /> */}
         <View
           style={{
             flexDirection: "row",
@@ -165,5 +255,35 @@ const EventCard = ({ item, index }) => {
     </Link>
   );
 };
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: wp(80),
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalItem: {
+    fontSize: 18,
+    paddingVertical: 10,
+  },
+  modalCancel: {
+    fontSize: 18,
+    paddingVertical: 10,
+    color: "red",
+    textAlign: "center",
+  },
+});
 
 export default Events;

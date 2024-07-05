@@ -1,4 +1,3 @@
-// AddEventModal.jsx
 import React, { useState } from "react";
 import {
   Modal,
@@ -56,7 +55,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
     try {
       console.log("Submitting event data:", eventData); // Log event data before submission
       const response = await axios.post(
-        "https://moto-app.onrender.com/events",
+        "https://moto-app.onrender.com/api/events",
         {
           ...eventData,
           coordinates: eventData.coordinates.split(",").map(Number),
@@ -93,7 +92,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
   };
 
   const handleConfirmDate = (selectedDate) => {
-    const formattedDate = selectedDate.toISOString(); // Format as per MongoDB date format
+    const formattedDate = selectedDate.toISOString().split("T")[0]; // Format as per MongoDB date format (YYYY-MM-DD)
     setEventData({ ...eventData, date: formattedDate });
     hideDatePicker();
   };
@@ -168,7 +167,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
             </TouchableOpacity>
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
-              mode="datetime"
+              mode="date"
               onConfirm={handleConfirmDate}
               onCancel={hideDatePicker}
             />
