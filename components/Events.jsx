@@ -17,6 +17,7 @@ import AddEventModal from "./AddEventModal"; // Adjust the import path according
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 // Mapping of country names to actual image paths
 const countryImages = {
@@ -37,17 +38,15 @@ const Events = ({ currentUserId, showAddEventButton }) => {
   const fetchEvents = async () => {
     try {
       const response = await axios.get(
-        "https://moto-app.onrender.com/api/events" // Replace with your local IP address
+        "https://moto-app.onrender.com/api/events"
       );
       let allEvents = response.data.data;
-
       if (currentUserId) {
         allEvents = allEvents.filter(
           (event) => event.user.currentUser._id === currentUserId
         );
       }
-
-      setEvents(allEvents);
+      setEvents(allEvents.sort((a, b) => new Date(b.date) - new Date(a.date)));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -231,25 +230,37 @@ const EventCard = ({ item, index }) => {
             </Text>
           </View>
           {item.access === 0 ? (
-            <Ionicons name="airplane-outline" size={wp(5)} color="black" />
+            <MaterialCommunityIcons
+              name="rv-truck"
+              size={wp(4)}
+              color="black"
+            />
+          ) : item.access === 1 ? (
+            <MaterialCommunityIcons
+              name="car-side"
+              size={wp(5)}
+              color="black"
+            />
           ) : (
-            <Ionicons name="car-outline" size={wp(5)} color="black" />
+            <MaterialCommunityIcons
+              name="car-estate"
+              size={wp(5)}
+              color="black"
+            />
           )}
         </View>
-        <Text style={{ fontSize: hp(1.3), fontWeight: "semibold" }}>
-          {item.description}
-        </Text>
         <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
           Date: {item.date}
         </Text>
-        <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
-          ID: {item._id}
+        <Text style={{ fontSize: hp(1.3), fontWeight: "semibold" }}>
+          {item.description}
         </Text>
+
         <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
           Section: {item.section}
         </Text>
         <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
-          Created by: {item.user.currentUser.username}
+          Country: {item.country}
         </Text>
       </TouchableOpacity>
     </Link>

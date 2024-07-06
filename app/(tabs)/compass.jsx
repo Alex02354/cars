@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, View, ScrollView } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -8,22 +15,18 @@ import Events from "../../components/Events";
 import Entypo from "@expo/vector-icons/Entypo";
 import Divider from "../../components/Divider";
 
-const compass = () => {
+const Settings = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
 
-  return (
-    <ScrollView
-      style={{
-        flex: 1,
-        flexDirection: "column" /* backgroundColor: "#BCBCBB" */,
-      }}
-    >
+  const renderHeader = () => (
+    <>
       <Image
         source={require("@/assets/images/header.jpg")}
         style={{
           width: wp(100),
           height: wp(37),
           resizeMode: "contain",
+          marginTop: "6%",
         }}
       />
       <View className="mx-10">
@@ -86,7 +89,34 @@ const compass = () => {
           />
         </View>
       </View>
-    </ScrollView>
+    </>
+  );
+
+  const renderFooter = () => (
+    <View
+      style={{
+        alignItems: "center",
+        marginBottom: 50,
+        justifyContent: "center",
+      }}
+    >
+      <TouchableOpacity activeOpacity={1} style={[styles.button2]}>
+        <Text style={[styles.btnText2]}>View More</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  return (
+    <FlatList
+      data={[]} // An empty array to ensure the FlatList renders
+      keyExtractor={(item, index) => index.toString()}
+      ListHeaderComponent={renderHeader}
+      ListFooterComponent={renderFooter}
+      renderItem={null}
+      ListHeaderComponentStyle={{ flex: 1 }}
+      ListFooterComponentStyle={{ flex: 1 }}
+      ListEmptyComponent={<Events />} // Render Events here directly when there is no data
+    />
   );
 };
 
@@ -121,4 +151,4 @@ const styles = StyleSheet.create({
   activeText: { color: "#FFD800" },
 });
 
-export default compass;
+export default Settings;

@@ -61,6 +61,7 @@ const kemp = () => {
           width: wp(100),
           height: wp(37),
           resizeMode: "contain",
+          marginTop: "6%",
         }}
       />
       <SafeAreaView>

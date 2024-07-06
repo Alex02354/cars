@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  StatusBar,
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -14,7 +15,6 @@ import {
 import Events from "../../../components/Events";
 import AddEventModal from "../../../components/AddEventModal"; // Adjust the path as per your project structure
 import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 
 const HomeScreen = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
@@ -28,12 +28,14 @@ const HomeScreen = () => {
 
   const renderHeader = () => (
     <>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
       <Image
         source={require("@/assets/images/header.jpg")}
         style={{
           width: wp(100),
           height: wp(37),
           resizeMode: "contain",
+          marginTop: "6%",
         }}
       />
       <View style={{ marginHorizontal: "11%" }}>

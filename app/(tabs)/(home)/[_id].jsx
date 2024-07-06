@@ -3,12 +3,13 @@ import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
 import { useSelector } from "react-redux";
+import MapComponent from "../../../components/map"; // Adjust the path as needed
 
 const EventDetail = () => {
   const { _id } = useLocalSearchParams();
   const [event, setEvent] = useState(null);
   const [error, setError] = useState(null);
-  const user = useSelector((state) => state.user.currentUser); // Replace with the actual path to the user in your Redux state
+  const user = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -36,12 +37,16 @@ const EventDetail = () => {
     return <Text>Loading...</Text>;
   }
 
+  const { title, image, description, coordinates } = event;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{event.title}</Text>
-      <Image source={{ uri: event.image }} style={styles.image} />
-      <Text style={styles.description}>{event.description}</Text>
-      {event.map && <Image source={{ uri: event.map }} style={styles.map} />}
+      <Text style={styles.title}>{title}</Text>
+      <Image source={{ uri: image }} style={styles.image} />
+      <Text style={styles.description}>{description}</Text>
+      {coordinates && coordinates.length === 2 && (
+        <MapComponent latitude={coordinates[0]} longitude={coordinates[1]} />
+      )}
     </ScrollView>
   );
 };
@@ -51,6 +56,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 20,
     alignItems: "center",
+    marginTop: "6%",
   },
   title: {
     fontSize: 24,
@@ -67,12 +73,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginBottom: 20,
-  },
-  map: {
-    width: "100%",
-    height: 200,
-    borderRadius: 10,
-    marginTop: 20,
   },
 });
 

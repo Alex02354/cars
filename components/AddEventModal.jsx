@@ -178,8 +178,9 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
                 style={styles.picker}
                 onValueChange={(itemValue) => handleChange("access", itemValue)}
               >
-                <Picker.Item label="Plane" value={0} />
+                <Picker.Item label="Caravan" value={0} />
                 <Picker.Item label="Car" value={1} />
+                <Picker.Item label="Off-road" value={2} />
               </Picker>
             </View>
 

@@ -27,6 +27,7 @@ const Account = () => {
           width: wp(100),
           height: wp(37),
           resizeMode: "contain",
+          marginTop: "6%",
         }}
       />
       <View style={{ marginHorizontal: "11%" }}>

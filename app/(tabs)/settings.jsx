@@ -26,6 +26,7 @@ const Settings = () => {
           width: wp(100),
           height: wp(37),
           resizeMode: "contain",
+          marginTop: "6%",
         }}
       />
       <View className="mx-10">
@@ -86,26 +87,6 @@ const Settings = () => {
               resizeMode: "contain",
             }}
           />
-        </View>
-
-        <View className="flex-row justify-between mt-10 items-center mb-1">
-          <Text style={[styles.btnText]}>Places</Text>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={[styles.button]}
-            className="flex-row px-6"
-          >
-            <Text
-              style={[
-                styles.btnText,
-                selectedTab === "Filter" && styles.activeText,
-              ]}
-              className="mr-5"
-            >
-              Filter
-            </Text>
-            <Entypo name="triangle-down" size={20} color="black" />
-          </TouchableOpacity>
         </View>
       </View>
     </>
