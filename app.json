@@ -21,7 +21,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.alex02354.cars"
+      "package": "com.alex02354.cars",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDQUXXvihTKeugW48q0ipEF4gJyp4BYkEw"
+        }
+      }
     },
     "web": {
       "bundler": "metro",

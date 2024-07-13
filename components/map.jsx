@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Linking } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const MapComponent = ({ latitude, longitude }) => {
   const markerCoordinate = { latitude, longitude };
@@ -13,6 +13,7 @@ const MapComponent = ({ latitude, longitude }) => {
   return (
     <View style={styles.mapContainer}>
       <MapView
+        provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
           latitude,

@@ -37,16 +37,18 @@ const EventDetail = () => {
     return <Text>Loading...</Text>;
   }
 
-  const { title, image, description, coordinates } = event;
+  const { title, image, description, coordinates, map, date } = event;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>{date}</Text>
       <Image source={{ uri: image }} style={styles.image} />
       <Text style={styles.description}>{description}</Text>
       {coordinates && coordinates.length === 2 && (
         <MapComponent latitude={coordinates[0]} longitude={coordinates[1]} />
       )}
+      <Image source={{ uri: map }} style={styles.image} />
     </ScrollView>
   );
 };
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     borderRadius: 10,
-    marginBottom: 20,
+    marginVertical: 20,
   },
   description: {
     fontSize: 16,
