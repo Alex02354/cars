@@ -197,11 +197,11 @@ const EventCard = ({ item, index }) => {
         activeOpacity={0.5}
         style={{
           width: wp(38),
-          height: wp(64),
+          height: wp(60),
           borderWidth: 1.5,
-          gap: 1,
+          gap: 0,
           margin: 5, // Add margin to separate cards
-          padding: 5, // Add padding inside the card
+          padding: 4, // Add padding inside the card
           backgroundColor: "white", // Add background color to the card
           borderRadius: 5, // Add border radius to the card
           justifyContent: "space-between",
@@ -211,7 +211,7 @@ const EventCard = ({ item, index }) => {
           source={{ uri: item.image }}
           resizeMode="cover"
           style={{
-            width: wp(28),
+            width: wp(30),
             height: wp(20),
             alignSelf: "center",
             borderRadius: 10, // Add border radius to the image
@@ -249,17 +249,17 @@ const EventCard = ({ item, index }) => {
             />
           )}
         </View>
-        <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
+        <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
           Date: {item.date}
         </Text>
-        <Text style={{ fontSize: hp(1.3), fontWeight: "semibold" }}>
+        <Text style={{ fontSize: hp(1.4), fontWeight: "semibold" }}>
           {item.description}
         </Text>
 
-        <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
+        <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
           Section: {item.section}
         </Text>
-        <Text style={{ fontSize: hp(1.3), fontWeight: "bold" }}>
+        <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
           Country: {item.country}
         </Text>
       </TouchableOpacity>

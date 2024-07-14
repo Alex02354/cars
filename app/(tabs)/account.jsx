@@ -47,7 +47,7 @@ const Account = () => {
           />
         </View>
         <View className="flex-row justify-between items-center">
-          <Text style={[styles.btnText]}>My profile</Text>
+          <Text style={[styles.btnText]}>My Events</Text>
         </View>
       </View>
     </>

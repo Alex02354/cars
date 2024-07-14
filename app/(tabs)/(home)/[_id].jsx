@@ -4,6 +4,10 @@ import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
 import { useSelector } from "react-redux";
 import MapComponent from "../../../components/map"; // Adjust the path as needed
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
 const EventDetail = () => {
   const { _id } = useLocalSearchParams();
@@ -43,12 +47,26 @@ const EventDetail = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.title}>{date}</Text>
-      <Image source={{ uri: image }} style={styles.image} />
+      <Image
+        source={{ uri: image }}
+        style={{ width: wp(80), height: wp(50), borderRadius: 10 }}
+      />
+
       <Text style={styles.description}>{description}</Text>
+      <Text>Location:</Text>
       {coordinates && coordinates.length === 2 && (
         <MapComponent latitude={coordinates[0]} longitude={coordinates[1]} />
       )}
-      <Image source={{ uri: map }} style={styles.image} />
+      <Text>Route:</Text>
+      <Image
+        source={{ uri: map }}
+        style={{
+          width: wp(80),
+          height: wp(50),
+          borderRadius: 10,
+          marginVertical: 10,
+        }}
+      />
     </ScrollView>
   );
 };

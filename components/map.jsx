@@ -3,6 +3,14 @@ import { View, StyleSheet, Linking } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const MapComponent = ({ latitude, longitude }) => {
+  if (!latitude || !longitude) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Invalid coordinates</Text>
+      </View>
+    );
+  }
+
   const markerCoordinate = { latitude, longitude };
 
   const handleMarkerPress = () => {
@@ -30,14 +38,22 @@ const MapComponent = ({ latitude, longitude }) => {
 
 const styles = StyleSheet.create({
   mapContainer: {
-    width: "100%",
+    width: "85%",
     height: 200,
     borderRadius: 10,
     overflow: "hidden",
-    marginTop: 20,
+    marginVertical: 20,
   },
   map: {
     flex: 1,
+  },
+  errorContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 200,
+  },
+  errorText: {
+    color: "red",
   },
 });
 
