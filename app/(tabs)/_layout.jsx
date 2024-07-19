@@ -19,6 +19,7 @@ export default function TabLayout() {
         options={{
           title: "",
           headerShown: false,
+          /* unmountOnBlur: true, */
           tabBarIcon: ({ size, focused }) => (
             <TabBarIcon
               name={focused ? "home-sharp" : "home-outline"}
@@ -134,6 +135,30 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="miesta2"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="kemp2"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="itinerar2"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="trasy2"
         options={{
           tabBarButton: () => null,
           tabBarVisible: false,

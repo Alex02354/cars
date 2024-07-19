@@ -12,12 +12,9 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Events from "../../components/Events";
-import Entypo from "@expo/vector-icons/Entypo";
-import { useSelector } from "react-redux";
 
-const Account = () => {
+const Itinerar2 = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
-  const user = useSelector((state) => state.user.currentUser); // Replace with the actual path to the user in your Redux state
 
   const renderHeader = () => (
     <>
@@ -28,10 +25,25 @@ const Account = () => {
           height: wp(37),
           resizeMode: "contain",
           marginTop: "6%",
-          marginBottom: "6%",
         }}
       />
-      <View style={{ marginHorizontal: "11%" }}></View>
+      <View style={{ marginHorizontal: "11%" }}>
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            source={require("@/assets/images/itinerar.png")}
+            style={{
+              width: wp(55),
+              height: wp(30),
+              resizeMode: "contain",
+            }}
+          />
+        </View>
+      </View>
     </>
   );
 
@@ -59,8 +71,14 @@ const Account = () => {
       ListHeaderComponentStyle={{ flex: 1 }}
       ListFooterComponentStyle={{ flex: 1 }}
       ListEmptyComponent={
-        <Events currentUserId={user._id} showAddEventButton={false} />
-      } // Pass the current user ID to the Events component
+        <Events
+          currentUserId={null}
+          showAddEventButton={false}
+          showSectionFilters={false}
+          filterSection="itinerary" // Pass the filterSection prop to Events
+          hideSectionFilters={true} // New prop to hide section filter buttons
+        />
+      } // Render Events here directly when there is no data
     />
   );
 };
@@ -96,4 +114,4 @@ const styles = StyleSheet.create({
   activeText: { color: "#FFD800" },
 });
 
-export default Account;
+export default Itinerar2;

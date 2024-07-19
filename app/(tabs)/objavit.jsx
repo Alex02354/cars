@@ -35,7 +35,7 @@ const Pridat = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              router.push({ pathname: "/kemp" });
+              router.push({ pathname: "/kemp2" });
             }}
             style={styles.touchable}
           >
@@ -49,7 +49,7 @@ const Pridat = () => {
         <View style={styles.row}>
           <TouchableOpacity
             onPress={() => {
-              router.push({ pathname: "/itinerar" });
+              router.push({ pathname: "/itinerar2" });
             }}
             style={styles.touchable}
           >
@@ -60,7 +60,7 @@ const Pridat = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              router.push({ pathname: "/trasy" });
+              router.push({ pathname: "/trasy2" });
             }}
             style={styles.touchable}
           >

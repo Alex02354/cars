@@ -1,8 +1,4 @@
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import Divider from "../../components/Divider";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,39 +10,136 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
-import React, { useState } from "react";
-import DatePicker from "react-native-modern-datepicker";
-import { getToday, getFormatedDate } from "react-native-modern-datepicker";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { SelectList } from "react-native-dropdown-select-list";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import Divider from "../../components/Divider";
+import { Picker } from "@react-native-picker/picker";
+import { useRouter } from "expo-router";
 
 const itinerar = () => {
-  const today = new Date();
-  const startDate = getFormatedDate(
-    today.setDate(today.getDate() + 1),
-    "YYYY/MM/DD"
-  );
+  const initialState = {
+    title: "",
+    description: "",
+    image: "",
+    map: "",
+    coordinates: "",
+    access: 0,
+    date: "",
+    section: "itinerary",
+    country: "Italy",
+  };
 
-  const [open, setOpen] = useState(false); // open and closes the modal
-  const [date, setDate] = useState("12/12/2023"); // date variable
+  const [eventData, setEventData] = useState(initialState);
+  const [open, setOpen] = useState(false); // Open and closes the modal
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  function handleOnPress() {
-    setOpen(!open);
-  }
+  const user = useSelector((state) => state.user);
+  const router = useRouter();
 
-  function handleChange(propDate) {
-    setDate(propDate);
-  }
-
-  const [selected, setSelected] = React.useState("");
-
-  const data = [
-    { key: "1", value: "SERBIA BOSNIA AND HERCEGOVINA" },
-    { key: "2", value: "Stockholm / SWEDEN" },
-    { key: "3", value: "SLOVAKIA" },
-    { key: "4", value: "HUNGARY" },
-    { key: "5", value: "AUSTRIA" },
+  const countries = [
+    { key: "1", value: "Slovakia" },
+    { key: "2", value: "France" },
+    { key: "3", value: "Czech Republic" },
+    { key: "4", value: "Italy" },
   ];
+
+  const accessOptions = [
+    { label: "Caravan", value: 0 },
+    { label: "Car", value: 1 },
+    { label: "Off-road", value: 2 },
+    // Add other options as needed
+  ];
+
+  const handleChange = (name, value) => {
+    setEventData({ ...eventData, [name]: value });
+  };
+
+  const handleCountryChange = (value) => {
+    setEventData({ ...eventData, country: value });
+  };
+
+  const handleDateChange = (selectedDate) => {
+    const formattedDate = selectedDate.toISOString().split("T")[0]; // Format as per MongoDB date format (YYYY-MM-DD)
+    setEventData({ ...eventData, date: formattedDate });
+    setDatePickerVisibility(false);
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleSubmit = async () => {
+    const { title, image, date, coordinates, access, country } = eventData;
+
+    if (!title || !image || !date || !coordinates || !access || !country) {
+      setErrorMessage("Please fill in all required fields.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+
+    try {
+      console.log("Submitting event data:", eventData); // Log event data before submission
+
+      // Ensure date is in the correct format
+      const formattedDate = new Date(date).toISOString().split("T")[0];
+
+      const response = await axios.post(
+        "https://moto-app.onrender.com/api/events",
+        {
+          ...eventData,
+          coordinates: eventData.coordinates.split(",").map(Number),
+          user, // Include the user in the event data
+          favourite: false,
+          date: formattedDate, // Use the formatted date string
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        setSuccessMessage("Event added successfully!");
+        setEventData({
+          title: "",
+          description: "",
+          image: "",
+          map: "",
+          coordinates: "",
+          access: 0,
+          date: "",
+          section: "itinerary",
+          country: countries[0].name, // Reset to Slovakia
+          favourite: false, // Reset favourite to false
+        }); // Clear form data and reset to default country
+        router.push("/(tabs)"); // Navigate to the home screen
+      } else {
+        setErrorMessage(`Failed to add event: ${response.data.message}`);
+      }
+    } catch (err) {
+      setErrorMessage(`Error adding event: ${err.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <ScrollView
@@ -97,6 +190,10 @@ const itinerar = () => {
               }}
             />
           </View>
+          {successMessage && (
+            <Text style={styles.successText}>{successMessage}</Text>
+          )}
+          {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
           <View style={{ marginBottom: hp(2) }}>
             <View style={{ flexDirection: "row" }}>
               <Text
@@ -118,14 +215,14 @@ const itinerar = () => {
               >
                 <TextInput
                   type="text"
-                  name="TITLE"
-                  id="TITLE"
+                  name="title"
+                  value={eventData.title}
+                  onChangeText={(text) => handleChange("title", text)}
                   style={{
                     paddingVertical: hp(1),
                     paddingHorizontal: wp(2),
                     color: "black",
                   }}
-                  //placeholder="janesmith"
                 />
               </View>
             </View>
@@ -151,13 +248,13 @@ const itinerar = () => {
               >
                 <TextInput
                   type="text"
-                  name="DESCRIPTION"
-                  id="DESCRIPTION"
+                  name="description"
+                  value={eventData.description}
+                  onChangeText={(text) => handleChange("description", text)}
                   style={{
                     paddingHorizontal: wp(2),
                     color: "black",
                   }}
-                  //placeholder="janesmith"
                   numberOfLines={4}
                   multiline={true}
                 />
@@ -183,42 +280,17 @@ const itinerar = () => {
                   backgroundColor: "white",
                 }}
               >
-                <TouchableOpacity activeOpacity={1} style={[styles.button3]}>
-                  <Text
-                    style={{ color: "white", fontWeight: "bold", fontSize: 15 }}
-                  >
-                    Browse
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="UPLOAD ITINERAR"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                UPLOAD ITINERAR
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                }}
-              >
-                <TouchableOpacity activeOpacity={1} style={[styles.button3]}>
-                  <Text
-                    style={{ color: "white", fontWeight: "bold", fontSize: 15 }}
-                  >
-                    Browse
-                  </Text>
-                </TouchableOpacity>
+                <TextInput
+                  type="text"
+                  name="image"
+                  value={eventData.image}
+                  onChangeText={(text) => handleChange("image", text)}
+                  style={{
+                    paddingVertical: hp(1),
+                    paddingHorizontal: wp(2),
+                    color: "black",
+                  }}
+                />
               </View>
             </View>
           </View>
@@ -243,14 +315,14 @@ const itinerar = () => {
               >
                 <TextInput
                   type="text"
-                  name="Coordinates"
-                  id="Coordinates"
+                  name="coordinates"
+                  value={eventData.coordinates}
+                  onChangeText={(text) => handleChange("coordinates", text)}
                   style={{
                     paddingVertical: hp(1),
                     paddingHorizontal: wp(2),
                     color: "black",
                   }}
-                  //placeholder="janesmith"
                 />
               </View>
             </View>
@@ -274,17 +346,23 @@ const itinerar = () => {
                   backgroundColor: "white",
                 }}
               >
-                <TextInput
-                  type="text"
-                  name="Access"
-                  id="Access"
+                <Picker
+                  selectedValue={eventData.access}
+                  onValueChange={(value) => handleChange("access", value)}
                   style={{
                     paddingVertical: hp(1),
                     paddingHorizontal: wp(2),
                     color: "black",
                   }}
-                  //placeholder="janesmith"
-                />
+                >
+                  {accessOptions.map((option) => (
+                    <Picker.Item
+                      key={option.value}
+                      label={option.label}
+                      value={option.value}
+                    />
+                  ))}
+                </Picker>
               </View>
             </View>
           </View>
@@ -308,10 +386,10 @@ const itinerar = () => {
                 }}
               >
                 <SelectList
-                  setSelected={(val) => setSelected(val)}
-                  data={data}
+                  setSelected={handleCountryChange}
+                  data={countries}
                   save="value"
-                  boxStyles={{ borderRadius: 0, borderWidth: 0 }} //override default styles
+                  boxStyles={{ borderRadius: 0, borderWidth: 0 }} // override default styles
                   search={false}
                   dropdownStyles={{ borderRadius: 0, borderWidth: 1 }}
                 />
@@ -319,7 +397,7 @@ const itinerar = () => {
             </View>
           </View>
           <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row", paddingBottom: 6 }}>
+            <View style={{ flexDirection: "row", paddingBottom: 0 }}>
               <Text
                 htmlFor="A DATE"
                 className="block text-sm font-medium leading-6 text-black-900"
@@ -329,14 +407,25 @@ const itinerar = () => {
               <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
             </View>
             <TouchableOpacity
-              onPress={handleOnPress}
+              onPress={showDatePicker}
               style={{
                 borderWidth: 1,
                 borderColor: "#FFD800",
                 borderRadius: 2,
                 backgroundColor: "white",
+                flexDirection: "row",
+                justifyContent: "space-between",
               }}
             >
+              <TextInput
+                value={eventData.date}
+                editable={false}
+                style={{
+                  paddingVertical: hp(1),
+                  paddingHorizontal: wp(2),
+                  color: "black",
+                }}
+              />
               <AntDesign
                 name="calendar"
                 size={24}
@@ -348,22 +437,14 @@ const itinerar = () => {
                 }}
               />
             </TouchableOpacity>
-            <Modal animationType="slide" transparent={true} visible={open}>
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <DatePicker
-                    mode="calendar"
-                    selected={date}
-                    onDateChanged={handleChange}
-                    minimumDate={startDate}
-                  />
-                  <TouchableOpacity onPress={handleOnPress}>
-                    <Text>Close</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleDateChange}
+              onCancel={hideDatePicker}
+            />
           </View>
+
           <View
             style={{
               alignItems: "center",
@@ -371,8 +452,15 @@ const itinerar = () => {
               justifyContent: "center",
             }}
           >
-            <TouchableOpacity activeOpacity={1} style={[styles.button2]}>
-              <Text style={[styles.btnText2]}>To Send</Text>
+            <TouchableOpacity
+              activeOpacity={1}
+              style={[styles.button2]}
+              onPress={handleSubmit}
+              disabled={isSubmitting}
+            >
+              <Text style={[styles.btnText2]}>
+                {isSubmitting ? "Submitting..." : "To Send"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -432,6 +520,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFD800",
     padding: 10,
     width: "40%",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  successText: {
+    color: "green",
+    fontSize: 16,
+    textAlign: "center",
+    marginVertical: 10,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    textAlign: "center",
+    marginVertical: 10,
   },
 });
 
