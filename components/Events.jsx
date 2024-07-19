@@ -34,6 +34,7 @@ const Events = ({ currentUserId, showAddEventButton }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedSection, setSelectedSection] = useState(null);
 
   const fetchEvents = async () => {
     try {
@@ -67,9 +68,15 @@ const Events = ({ currentUserId, showAddEventButton }) => {
     setFilterModalVisible(false);
   };
 
-  const filteredEvents = selectedCountry
-    ? events.filter((event) => event.country === selectedCountry)
-    : events;
+  const filteredEvents = events.filter((event) => {
+    const countryMatches = selectedCountry
+      ? event.country === selectedCountry
+      : true;
+    const sectionMatches = selectedSection
+      ? event.section === selectedSection
+      : true;
+    return countryMatches && sectionMatches;
+  });
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error}</Text>;
@@ -93,16 +100,105 @@ const Events = ({ currentUserId, showAddEventButton }) => {
             justifyContent: "center",
             gap: 15,
             flex: 1,
-            marginRight: 5,
+            margin: 5,
           }}
-          onPress={() => handleCountrySelect(null)}
+          onPress={() => setSelectedSection(null)}
         >
-          <Text style={{ color: "black", fontWeight: "bold" }}>All</Text>
+          <Text style={{ color: "black", fontWeight: "bold" }}>ALL</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{
             backgroundColor: "#FFD800",
             padding: 10,
+            borderRadius: 5,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 15,
+            flex: 1,
+            margin: 5,
+          }}
+          onPress={() => setSelectedSection("itinerary")}
+        >
+          <Text style={{ color: "black", fontWeight: "bold" }}>ITINERARY</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#FFD800",
+            padding: 10,
+            borderRadius: 5,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 15,
+            flex: 1,
+            margin: 5,
+          }}
+          onPress={() => setSelectedSection("places")}
+        >
+          <Text style={{ color: "black", fontWeight: "bold" }}>PLACES</Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          marginHorizontal: "20%",
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#FFD800",
+            padding: 10,
+            borderRadius: 5,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 15,
+            flex: 1,
+            margin: 5,
+            paddingHorizontal: 5,
+          }}
+          onPress={() => setSelectedSection("kemp")}
+        >
+          <Text style={{ color: "black", fontWeight: "bold" }}>KEMP</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#FFD800",
+            padding: 10,
+            borderRadius: 5,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            gap: 15,
+            flex: 1,
+            margin: 5,
+            paddingHorizontal: 5,
+          }}
+          onPress={() => setSelectedSection("kemp")}
+        >
+          <Text style={{ color: "black", fontWeight: "bold" }}>OFFROAD</Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          justifyContent: "space-between",
+          marginHorizontal: "11%",
+          gap: 50,
+          flexDirection: "row",
+          marginVertical: "2%",
+        }}
+      >
+        <Text
+          style={{ color: "black", fontWeight: "bold", alignSelf: "center" }}
+        >
+          Country
+        </Text>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#FFD800",
+            padding: 8,
             borderRadius: 5,
             alignItems: "center",
             flexDirection: "row",
@@ -117,7 +213,7 @@ const Events = ({ currentUserId, showAddEventButton }) => {
           <Ionicons name="filter" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      {showAddEventButton && (
+      {/* {showAddEventButton && (
         <TouchableOpacity
           style={{
             backgroundColor: "#FFD800",
@@ -135,7 +231,7 @@ const Events = ({ currentUserId, showAddEventButton }) => {
           <MaterialIcons name="add-circle-outline" size={24} color="black" />
           <Text style={{ color: "black", fontWeight: "bold" }}>Add Event</Text>
         </TouchableOpacity>
-      )}
+      )} */}
       <FlatList
         data={filteredEvents}
         numColumns={2}
@@ -191,13 +287,27 @@ const Events = ({ currentUserId, showAddEventButton }) => {
 const EventCard = ({ item, index }) => {
   const countryImage = countryImages[item.country]; // Get the country image path based on the country
 
+  // Function to map access value to text
+  const getAccessText = (access) => {
+    switch (access) {
+      case 0:
+        return "caravan";
+      case 1:
+        return "car";
+      case 2:
+        return "offroad";
+      default:
+        return "unknown";
+    }
+  };
+
   return (
     <Link href={`/${item._id}`} asChild>
       <TouchableOpacity
         activeOpacity={0.5}
         style={{
           width: wp(38),
-          height: wp(60),
+          height: wp(50),
           borderWidth: 1.5,
           gap: 0,
           margin: 5, // Add margin to separate cards
@@ -250,17 +360,13 @@ const EventCard = ({ item, index }) => {
           )}
         </View>
         <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
-          Date: {item.date}
-        </Text>
-        <Text style={{ fontSize: hp(1.4), fontWeight: "semibold" }}>
-          {item.description}
-        </Text>
-
-        <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
           Section: {item.section}
         </Text>
         <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
           Country: {item.country}
+        </Text>
+        <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
+          Access: {getAccessText(item.access)}
         </Text>
       </TouchableOpacity>
     </Link>
@@ -272,27 +378,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
-    width: wp(80),
-    padding: 20,
     backgroundColor: "white",
     borderRadius: 10,
+    padding: 20,
+    width: wp("80%"),
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
   },
   modalItem: {
-    fontSize: 18,
+    fontSize: 16,
     paddingVertical: 10,
   },
   modalCancel: {
-    fontSize: 18,
-    paddingVertical: 10,
+    fontSize: 16,
     color: "red",
+    marginTop: 10,
     textAlign: "center",
   },
 });

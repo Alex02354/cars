@@ -31,23 +31,8 @@ const Account = () => {
         }}
       />
       <View style={{ marginHorizontal: "11%" }}>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            source={require("@/assets/images/vyhlady.png")}
-            style={{
-              width: wp(55),
-              height: wp(30),
-              resizeMode: "contain",
-            }}
-          />
-        </View>
         <View className="flex-row justify-between items-center">
-          <Text style={[styles.btnText]}>My Events</Text>
+          <Text style={[styles.btnText2]}>My Events</Text>
         </View>
       </View>
     </>

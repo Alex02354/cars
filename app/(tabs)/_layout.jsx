@@ -116,6 +116,30 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
+      <Tabs.Screen
+        name="pridat"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="objavit"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="miesta2"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
     </Tabs>
   );
 }

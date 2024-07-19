@@ -58,15 +58,17 @@ const EventDetail = () => {
         <MapComponent latitude={coordinates[0]} longitude={coordinates[1]} />
       )}
       <Text>Route:</Text>
-      <Image
-        source={{ uri: map }}
-        style={{
-          width: wp(80),
-          height: wp(50),
-          borderRadius: 10,
-          marginVertical: 10,
-        }}
-      />
+      {map && map.trim() !== "" && (
+        <Image
+          source={{ uri: map }}
+          style={{
+            width: wp(80),
+            height: wp(50),
+            borderRadius: 10,
+            marginVertical: 10,
+          }}
+        />
+      )}
     </ScrollView>
   );
 };

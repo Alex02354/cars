@@ -42,22 +42,36 @@ const HomeScreen = () => {
         <View
           style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
         >
-          <Image
-            source={require("@/assets/images/car1.png")}
-            style={{
-              width: wp(45),
-              height: wp(30),
-              resizeMode: "contain",
+          <TouchableOpacity
+            onPress={() => {
+              handleTabPress("TRASY");
+              router.push({ pathname: "/objavit" });
             }}
-          />
-          <Image
-            source={require("@/assets/images/car2.png")}
-            style={{
-              width: wp(45),
-              height: wp(30),
-              resizeMode: "contain",
+          >
+            <Image
+              source={require("@/assets/images/car1.png")}
+              style={{
+                width: wp(45),
+                height: wp(30),
+                resizeMode: "contain",
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleTabPress("TRASY");
+              router.push({ pathname: "/pridat" });
             }}
-          />
+          >
+            <Image
+              source={require("@/assets/images/car2.png")}
+              style={{
+                width: wp(45),
+                height: wp(30),
+                resizeMode: "contain",
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View
           style={{

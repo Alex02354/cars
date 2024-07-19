@@ -12,84 +12,21 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Events from "../../components/Events";
-import Entypo from "@expo/vector-icons/Entypo";
-import Divider from "../../components/Divider";
 
 const Settings = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
 
   const renderHeader = () => (
-    <>
-      <Image
-        source={require("@/assets/images/header.jpg")}
-        style={{
-          width: wp(100),
-          height: wp(37),
-          resizeMode: "contain",
-          marginTop: "6%",
-        }}
-      />
-      <View className="mx-10">
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            source={require("@/assets/images/car2.png")}
-            style={{
-              width: wp(55),
-              height: wp(30),
-              resizeMode: "contain",
-            }}
-          />
-        </View>
-        <Divider />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            source={require("@/assets/images/priroda.png")}
-            style={{
-              width: wp(45),
-              height: wp(30),
-              resizeMode: "contain",
-              flex: 1,
-            }}
-          />
-          <Image
-            source={require("@/assets/images/stavby.png")}
-            style={{
-              width: wp(23),
-              height: wp(15),
-              resizeMode: "contain",
-              alignSelf: "center",
-              flex: 1,
-            }}
-          />
-        </View>
-
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            source={require("@/assets/images/vyhlady.png")}
-            style={{
-              width: wp(40),
-              height: wp(23),
-              resizeMode: "contain",
-            }}
-          />
-        </View>
-      </View>
-    </>
+    <Image
+      source={require("@/assets/images/header.jpg")}
+      style={{
+        width: wp(100),
+        height: wp(37),
+        resizeMode: "contain",
+        marginTop: "6%",
+        marginBottom: "6%",
+      }}
+    />
   );
 
   const renderFooter = () => (
