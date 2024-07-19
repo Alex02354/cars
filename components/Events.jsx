@@ -27,14 +27,24 @@ const countryImages = {
   Italy: require("../assets/images/italy.jpg"),
 };
 
-const Events = ({ currentUserId, showAddEventButton }) => {
+const Events = ({
+  currentUserId,
+  showAddEventButton,
+  filterSection,
+  hideSectionFilters,
+}) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedSection, setSelectedSection] = useState(null);
+  const [selectedSection, setSelectedSection] = useState(filterSection);
+  const [selectedTab, setSelectedTab] = useState("ALL");
+
+  const handleTabPress = (tabName) => {
+    setSelectedTab(tabName);
+  };
 
   const fetchEvents = async () => {
     try {
@@ -83,104 +93,122 @@ const Events = ({ currentUserId, showAddEventButton }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginHorizontal: "11%",
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFD800",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 15,
-            flex: 1,
-            margin: 5,
-          }}
-          onPress={() => setSelectedSection(null)}
-        >
-          <Text style={{ color: "black", fontWeight: "bold" }}>ALL</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFD800",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 15,
-            flex: 1,
-            margin: 5,
-          }}
-          onPress={() => setSelectedSection("itinerary")}
-        >
-          <Text style={{ color: "black", fontWeight: "bold" }}>ITINERARY</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFD800",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 15,
-            flex: 1,
-            margin: 5,
-          }}
-          onPress={() => setSelectedSection("places")}
-        >
-          <Text style={{ color: "black", fontWeight: "bold" }}>PLACES</Text>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          marginHorizontal: "20%",
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFD800",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 15,
-            flex: 1,
-            margin: 5,
-            paddingHorizontal: 5,
-          }}
-          onPress={() => setSelectedSection("kemp")}
-        >
-          <Text style={{ color: "black", fontWeight: "bold" }}>KEMP</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFD800",
-            padding: 10,
-            borderRadius: 5,
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 15,
-            flex: 1,
-            margin: 5,
-            paddingHorizontal: 5,
-          }}
-          onPress={() => setSelectedSection("kemp")}
-        >
-          <Text style={{ color: "black", fontWeight: "bold" }}>OFFROAD</Text>
-        </TouchableOpacity>
-      </View>
+      {!hideSectionFilters && (
+        <>
+          <View
+            style={{
+              alignItems: "center",
+              margin: 10,
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: 10,
+            }}
+          >
+            <TouchableOpacity
+              style={[styles.button, selectedTab === "ALL" && styles.activeTab]}
+              onPress={() => {
+                setSelectedSection(null);
+                handleTabPress("ALL");
+              }}
+            >
+              <Text
+                style={[
+                  styles.btnText,
+                  selectedTab === "ALL" && styles.activeText,
+                ]}
+              >
+                ALL
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                selectedTab === "ITINERARY" && styles.activeTab,
+              ]}
+              onPress={() => {
+                setSelectedSection("itinerary");
+                handleTabPress("ITINERARY");
+              }}
+            >
+              <Text
+                style={[
+                  styles.btnText,
+                  selectedTab === "ITINERARY" && styles.activeText,
+                ]}
+              >
+                ITINERARY
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                selectedTab === "PLACES" && styles.activeTab,
+              ]}
+              onPress={() => {
+                setSelectedSection("places");
+                handleTabPress("PLACES");
+              }}
+            >
+              <Text
+                style={[
+                  styles.btnText,
+                  selectedTab === "PLACES" && styles.activeText,
+                ]}
+              >
+                PLACES
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              alignItems: "center",
+              marginBottom: 10,
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: 10,
+            }}
+          >
+            <TouchableOpacity
+              style={[
+                styles.button,
+                selectedTab === "KEMP" && styles.activeTab,
+              ]}
+              onPress={() => {
+                setSelectedSection("kemp");
+                handleTabPress("KEMP");
+              }}
+            >
+              <Text
+                style={[
+                  styles.btnText,
+                  selectedTab === "KEMP" && styles.activeText,
+                ]}
+              >
+                KEMP
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                selectedTab === "OFFROAD" && styles.activeTab,
+              ]}
+              onPress={() => {
+                setSelectedSection("offroad");
+                handleTabPress("OFFROAD");
+              }}
+            >
+              <Text
+                style={[
+                  styles.btnText,
+                  selectedTab === "OFFROAD" && styles.activeText,
+                ]}
+              >
+                OFFROAD
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
       <View
         style={{
           justifyContent: "space-between",
@@ -401,6 +429,34 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
   },
+  button: {
+    alignItems: "center",
+    backgroundColor: "#FFD800",
+    padding: 10,
+    borderRadius: 5,
+    paddingHorizontal: 30,
+  },
+  button2: {
+    alignItems: "center",
+    backgroundColor: "#FFD800",
+    padding: 10,
+    paddingHorizontal: 35,
+    borderRadius: 2.65,
+    elevation: 4,
+  },
+  btnText: {
+    color: "black",
+    fontWeight: "bold",
+  },
+  btnText2: {
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 15,
+  },
+  activeTab: {
+    backgroundColor: "black",
+  },
+  activeText: { color: "#FFD800" },
 });
 
 export default Events;

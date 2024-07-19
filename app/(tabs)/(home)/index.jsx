@@ -20,11 +20,11 @@ const HomeScreen = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
   const [modalVisible, setModalVisible] = useState(false);
 
+  const router = useRouter();
+
   const handleTabPress = (tabName) => {
     setSelectedTab(tabName);
   };
-
-  const router = useRouter();
 
   const renderHeader = () => (
     <>
@@ -73,149 +73,6 @@ const HomeScreen = () => {
             />
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            alignItems: "center",
-            margin: 10,
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 10,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              handleTabPress("ALL");
-            }}
-            style={[styles.button, selectedTab === "ALL" && styles.activeTab]}
-          >
-            <Text
-              style={[
-                styles.btnText,
-                selectedTab === "ALL" && styles.activeText,
-              ]}
-            >
-              ALL
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              handleTabPress("MIESTA");
-              router.push({ pathname: "/miesta" });
-            }}
-            style={[
-              styles.button,
-              selectedTab === "MIESTA" && styles.activeTab,
-            ]}
-          >
-            <Text
-              style={[
-                styles.btnText,
-                selectedTab === "MIESTA" && styles.activeText,
-              ]}
-            >
-              MIESTA
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              handleTabPress("KEMP");
-              router.push({ pathname: "/kemp" });
-            }}
-            style={[styles.button, selectedTab === "KEMP" && styles.activeTab]}
-          >
-            <Text
-              style={[
-                styles.btnText,
-                selectedTab === "KEMP" && styles.activeText,
-              ]}
-            >
-              KEMP
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            alignItems: "center",
-            marginBottom: 10,
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 10,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              handleTabPress("TRASY");
-              router.push({ pathname: "/trasy" });
-            }}
-            style={[styles.button, selectedTab === "TRASY" && styles.activeTab]}
-          >
-            <Text
-              style={[
-                styles.btnText,
-                selectedTab === "TRASY" && styles.activeText,
-              ]}
-            >
-              TRASY
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              handleTabPress("ITINERÁR");
-              router.push({ pathname: "/itinerar" });
-            }}
-            style={[
-              styles.button,
-              selectedTab === "ITINERÁR" && styles.activeTab,
-            ]}
-          >
-            <Text
-              style={[
-                styles.btnText,
-                selectedTab === "ITINERÁR" && styles.activeText,
-              ]}
-            >
-              ITINERÁR
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View
-          className="flex-row justify-between items-center"
-          style={{ marginHorizontal: "0%", marginTop: 10 }}
-        ></View>
-        <View
-          style={{
-            alignItems: "center",
-            marginBottom: 10,
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 10,
-          }}
-        >
-          {/* Render other tab buttons as needed */}
-        </View>
-        {/* <View
-          className="flex-row justify-between items-center"
-          style={{ marginHorizontal: "0%", marginTop: 10 }}
-        >
-          <Text style={[styles.btnText]}>All</Text>
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            activeOpacity={1}
-            style={[styles.button]}
-            className="flex-row px-6"
-          >
-            <Text
-              style={[
-                styles.btnText,
-                selectedTab === "Filter" && styles.activeText,
-              ]}
-              className="mr-5"
-            >
-              Filter
-            </Text>
-            <Entypo name="triangle-down" size={20} color="black" />
-          </TouchableOpacity>
-        </View> */}
       </View>
       <StatusBar style="auto" />
     </>
