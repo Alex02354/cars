@@ -1,345 +1,306 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
-  StyleSheet,
-  SafeAreaView,
   View,
-  ScrollView,
   Text,
+  TextInput,
   TouchableOpacity,
-  Switch,
   Image,
+  StyleSheet,
+  Alert,
 } from "react-native";
-import FeatherIcon from "react-native-vector-icons/Feather";
+import { useDispatch, useSelector } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { app } from "../../firebase";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+  signOut,
+} from "../../redux/user/userSlice";
+import { useRouter } from "expo-router";
 
-export default function Settings() {
-  const [form, setForm] = useState({
-    darkMode: false,
-    emailNotifications: true,
-    pushNotifications: false,
-  });
+const Profile = () => {
+  const dispatch = useDispatch();
+  const { currentUser, loading, error } = useSelector((state) => state.user);
+  const router = useRouter();
+  const [image, setImage] = useState(null);
+  const [imagePercent, setImagePercent] = useState(0);
+  const [imageError, setImageError] = useState(false);
+  const [formData, setFormData] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+
+  useEffect(() => {
+    const requestPermission = async () => {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Denied",
+          "Sorry, we need camera roll permissions to make this work!"
+        );
+      }
+    };
+    requestPermission();
+  }, []);
+
+  const handleImagePick = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const handleFileUpload = useCallback(async (uri) => {
+    try {
+      const storage = getStorage(app);
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const fileName = new Date().getTime() + ".jpg";
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, blob);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setImagePercent(Math.round(progress));
+        },
+        (error) => {
+          setImageError(true);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            profilePicture: downloadURL,
+          }));
+        }
+      );
+    } catch (error) {
+      console.log("File upload error: ", error);
+      setImageError(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (image) {
+      handleFileUpload(image);
+    }
+  }, [image, handleFileUpload]);
+
+  const handleChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(
+        `https://moto-app.onrender.com/api/user/update/${currentUser._id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(updateUserFailure(data));
+        return;
+      }
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+    } catch (error) {
+      dispatch(updateUserFailure(error));
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(
+        `https://moto-app.onrender.com/api/user/delete/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch("https://moto-app.onrender.com/api/auth/signout");
+      dispatch(signOut());
+      router.push("/"); // Redirect to the index page after signout
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f6f6f6" }}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Settings</Text>
-
-          <Text style={styles.headerSubtitle}>
-            Lorem ipsum dolor sit amet consectetur.
-          </Text>
-        </View>
-
-        <ScrollView>
-          <View style={styles.profile}>
+    <View style={styles.container}>
+      <Text style={styles.title}>Profile</Text>
+      {currentUser && (
+        <>
+          <TouchableOpacity onPress={handleImagePick}>
             <Image
-              alt=""
               source={{
-                uri: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2.5&w=256&h=256&q=80",
+                uri: formData.profilePicture || currentUser.profilePicture,
               }}
-              style={styles.profileAvatar}
+              style={styles.profilePicture}
             />
-
-            <Text style={styles.profileName}>John Doe</Text>
-
-            <Text style={styles.profileEmail}>john.doe@mail.com</Text>
-
-            <TouchableOpacity
-              onPress={() => {
-                // handle onPress
-              }}
-            >
-              <View style={styles.profileAction}>
-                <Text style={styles.profileActionText}>Edit Profile</Text>
-
-                <FeatherIcon color="#fff" name="edit" size={16} />
-              </View>
+          </TouchableOpacity>
+          <Text style={styles.uploadStatus}>
+            {imageError ? (
+              <Text style={styles.errorText}>
+                Error uploading image (file size must be less than 2 MB)
+              </Text>
+            ) : imagePercent > 0 && imagePercent < 100 ? (
+              <Text
+                style={styles.uploadingText}
+              >{`Uploading: ${imagePercent} %`}</Text>
+            ) : imagePercent === 100 ? (
+              <Text style={styles.successText}>
+                Image uploaded successfully
+              </Text>
+            ) : (
+              ""
+            )}
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            defaultValue={currentUser.username}
+            onChangeText={(text) => handleChange("username", text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            defaultValue={currentUser.email}
+            onChangeText={(text) => handleChange("email", text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            onChangeText={(text) => handleChange("password", text)}
+          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSubmit}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+              {loading ? "Loading..." : "Update"}
+            </Text>
+          </TouchableOpacity>
+          <View style={styles.actions}>
+            <TouchableOpacity onPress={handleDeleteAccount}>
+              <Text style={styles.deleteText}>Delete Account</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleSignOut}>
+              <Text style={styles.signOutText}>Sign out</Text>
             </TouchableOpacity>
           </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Preferences</Text>
-
-            <View style={styles.sectionBody}>
-              <View style={[styles.rowWrapper, styles.rowFirst]}>
-                <TouchableOpacity
-                  onPress={() => {
-                    // handle onPress
-                  }}
-                  style={styles.row}
-                >
-                  <View
-                    style={[styles.rowIcon, { backgroundColor: "#fe9400" }]}
-                  >
-                    <FeatherIcon color="#fff" name="globe" size={20} />
-                  </View>
-
-                  <Text style={styles.rowLabel}>Language</Text>
-
-                  <View style={styles.rowSpacer} />
-
-                  <Text style={styles.rowValue}>English</Text>
-
-                  <FeatherIcon color="#C6C6C6" name="chevron-right" size={20} />
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.rowWrapper}>
-                <View style={styles.row}>
-                  <View
-                    style={[styles.rowIcon, { backgroundColor: "#007AFF" }]}
-                  >
-                    <FeatherIcon color="#fff" name="moon" size={20} />
-                  </View>
-
-                  <Text style={styles.rowLabel}>Dark Mode</Text>
-
-                  <View style={styles.rowSpacer} />
-
-                  <Switch
-                    onValueChange={(darkMode) => setForm({ ...form, darkMode })}
-                    value={form.darkMode}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.rowWrapper}>
-                <TouchableOpacity
-                  onPress={() => {
-                    // handle onPress
-                  }}
-                  style={styles.row}
-                >
-                  <View
-                    style={[styles.rowIcon, { backgroundColor: "#32c759" }]}
-                  >
-                    <FeatherIcon color="#fff" name="navigation" size={20} />
-                  </View>
-
-                  <Text style={styles.rowLabel}>Location</Text>
-
-                  <View style={styles.rowSpacer} />
-
-                  <Text style={styles.rowValue}>Los Angeles, CA</Text>
-
-                  <FeatherIcon color="#C6C6C6" name="chevron-right" size={20} />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Notifications</Text>
-
-              <View style={styles.sectionBody}>
-                <View style={[styles.rowWrapper, styles.rowFirst]}>
-                  <View style={styles.row}>
-                    <View
-                      style={[styles.rowIcon, { backgroundColor: "#38C959" }]}
-                    >
-                      <FeatherIcon color="#fff" name="at-sign" size={20} />
-                    </View>
-
-                    <Text style={styles.rowLabel}>Email Notifications</Text>
-
-                    <View style={styles.rowSpacer} />
-
-                    <Switch
-                      onValueChange={(emailNotifications) =>
-                        setForm({ ...form, emailNotifications })
-                      }
-                      value={form.emailNotifications}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.rowWrapper}>
-                  <View style={styles.row}>
-                    <View
-                      style={[styles.rowIcon, { backgroundColor: "#38C959" }]}
-                    >
-                      <FeatherIcon color="#fff" name="bell" size={20} />
-                    </View>
-
-                    <Text style={styles.rowLabel}>Push Notifications</Text>
-
-                    <View style={styles.rowSpacer} />
-
-                    <Switch
-                      onValueChange={(pushNotifications) =>
-                        setForm({ ...form, pushNotifications })
-                      }
-                      value={form.pushNotifications}
-                    />
-                  </View>
-                </View>
-
-                <View style={styles.rowWrapper}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      // handle onPress
-                    }}
-                    style={styles.row}
-                  >
-                    <View
-                      style={[styles.rowIcon, { backgroundColor: "#FE3C30" }]}
-                    >
-                      <FeatherIcon color="#fff" name="music" size={20} />
-                    </View>
-
-                    <Text style={styles.rowLabel}>Sound</Text>
-
-                    <View style={styles.rowSpacer} />
-
-                    <Text style={styles.rowValue}>Default</Text>
-
-                    <FeatherIcon
-                      color="#C6C6C6"
-                      name="chevron-right"
-                      size={20}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </View>
-
-          <Text style={styles.contentFooter}>Made with ❤️ in Seattle</Text>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+          {error && <Text style={styles.errorText}>Something went wrong!</Text>}
+          {updateSuccess && (
+            <Text style={styles.successText}>
+              User is updated successfully!
+            </Text>
+          )}
+        </>
+      )}
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 24,
-    paddingHorizontal: 0,
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 0,
-  },
-  contentFooter: {
-    marginTop: 24,
-    fontSize: 13,
-    fontWeight: "500",
-    color: "#929292",
-    textAlign: "center",
-  },
-  /** Header */
-  header: {
-    paddingHorizontal: 24,
-    marginBottom: 12,
-  },
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#1d1d1d",
-  },
-  headerSubtitle: {
-    fontSize: 15,
-    fontWeight: "500",
-    color: "#929292",
-    marginTop: 6,
-  },
-  /** Profile */
-  profile: {
-    padding: 16,
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "#e3e3e3",
-  },
-  profileAvatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 9999,
-  },
-  profileName: {
-    marginTop: 12,
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#090909",
-  },
-  profileEmail: {
-    marginTop: 6,
-    fontSize: 16,
-    fontWeight: "400",
-    color: "#848484",
-  },
-  profileAction: {
-    marginTop: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    flexDirection: "row",
+    flex: 1,
+    padding: 20,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#007bff",
-    borderRadius: 12,
   },
-  profileActionText: {
-    marginRight: 8,
-    fontSize: 15,
-    fontWeight: "600",
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  profilePicture: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
+  },
+  uploadStatus: {
+    marginBottom: 20,
+  },
+  input: {
+    width: "100%",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  button: {
+    width: "100%",
+    padding: 15,
+    backgroundColor: "#333",
+    borderRadius: 5,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  buttonText: {
     color: "#fff",
+    fontWeight: "bold",
   },
-  /** Section */
-  section: {
-    paddingTop: 12,
-  },
-  sectionTitle: {
-    marginVertical: 8,
-    marginHorizontal: 24,
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#a7a7a7",
-    textTransform: "uppercase",
-    letterSpacing: 1.2,
-  },
-  sectionBody: {
-    paddingLeft: 24,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "#e3e3e3",
-  },
-  /** Row */
-  row: {
+  actions: {
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingRight: 16,
-    height: 50,
+    justifyContent: "space-between",
+    width: "100%",
   },
-  rowWrapper: {
-    borderTopWidth: 1,
-    borderColor: "#e3e3e3",
+  deleteText: {
+    color: "red",
   },
-  rowFirst: {
-    borderTopWidth: 0,
+  signOutText: {
+    color: "red",
   },
-  rowIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 4,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
+  errorText: {
+    color: "red",
   },
-  rowLabel: {
-    fontSize: 17,
-    fontWeight: "500",
-    color: "#000",
+  successText: {
+    color: "green",
   },
-  rowSpacer: {
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: 0,
-  },
-  rowValue: {
-    fontSize: 17,
-    fontWeight: "500",
-    color: "#8B8B8B",
-    marginRight: 4,
+  uploadingText: {
+    color: "#666",
   },
 });
+
+export default Profile;

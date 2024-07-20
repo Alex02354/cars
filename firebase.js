@@ -1,12 +1,12 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "@react-native-firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from "firebase/app";
+import "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBwglNhuYbeRlvh44ntsaBYY4yRW_t1_lY",
   authDomain: "moto-app-f2fc8.firebaseapp.com",
+  databaseURL: "https://moto-app-f2fc8-default-rtdb.firebaseio.com", // Add this line
   projectId: "moto-app-f2fc8",
   storageBucket: "moto-app-f2fc8.appspot.com",
   messagingSenderId: "557304146214",
