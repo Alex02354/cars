@@ -32,7 +32,7 @@ const kemp = () => {
     coordinates: "",
     access: 0,
     date: "",
-    section: "kemp",
+    section: "camp",
     country: "Italy",
   };
 
@@ -126,7 +126,7 @@ const kemp = () => {
           coordinates: "",
           access: 0,
           date: "",
-          section: "kemp",
+          section: "camp",
           country: countries[0].name, // Reset to Slovakia
           favourite: false, // Reset favourite to false
         }); // Clear form data and reset to default country
@@ -166,7 +166,7 @@ const kemp = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/car2.png")}
+              source={require("@/assets/images/ADD.png")}
               style={{
                 width: wp(55),
                 height: wp(30),
@@ -182,7 +182,7 @@ const kemp = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/kempy.png")}
+              source={require("@/assets/images/camps.png")}
               style={{
                 width: wp(55),
                 height: wp(30),

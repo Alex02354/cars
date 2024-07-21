@@ -64,7 +64,7 @@ const Add = () => {
         <View style={{ marginHorizontal: wp(5), marginTop: hp(5) }}>
           <View style={{ alignItems: "center", justifyContent: "center" }}>
             <Image
-              source={require("@/assets/images/objavit_crop.png")}
+              source={require("@/assets/images/discover.png")}
               style={{ width: wp(55), height: wp(30), resizeMode: "contain" }}
             />
             <Text
@@ -194,7 +194,7 @@ const Add = () => {
                   onValueChange={setChecked2}
                   color={isChecked2 ? "black" : "#FFD800"}
                 />
-                <Text style={styles.paragraph}>KEMP</Text>
+                <Text style={styles.paragraph}>CAMP</Text>
               </View>
               <View style={styles.section}>
                 <Checkbox

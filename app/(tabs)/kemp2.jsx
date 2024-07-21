@@ -35,7 +35,7 @@ const Kemp2 = () => {
           }}
         >
           <Image
-            source={require("@/assets/images/kempy.png")}
+            source={require("@/assets/images/camps.png")}
             style={{
               width: wp(55),
               height: wp(30),
@@ -75,7 +75,7 @@ const Kemp2 = () => {
           currentUserId={null}
           showAddEventButton={false}
           showSectionFilters={false}
-          filterSection="kemp" // Pass the filterSection prop to Events
+          filterSection="camp" // Pass the filterSection prop to Events
           hideSectionFilters={true} // New prop to hide section filter buttons
         />
       } // Render Events here directly when there is no data

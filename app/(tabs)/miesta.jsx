@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
+  Alert,
 } from "react-native";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -22,6 +23,14 @@ import {
 import Divider from "../../components/Divider";
 import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { app } from "../../firebase";
 
 const miesta = () => {
   const initialState = {
@@ -42,6 +51,9 @@ const miesta = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [image, setImage] = useState(null);
+  const [imagePercent, setImagePercent] = useState(0);
+  const [imageError, setImageError] = useState(false);
 
   const user = useSelector((state) => state.user);
   const router = useRouter();
@@ -57,8 +69,73 @@ const miesta = () => {
     { label: "Caravan", value: 0 },
     { label: "Car", value: 1 },
     { label: "Off-road", value: 2 },
-    // Add other options as needed
   ];
+
+  useEffect(() => {
+    const requestPermission = async () => {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Denied",
+          "Sorry, we need camera roll permissions to make this work!"
+        );
+      }
+    };
+    requestPermission();
+  }, []);
+
+  const handleImagePick = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  const handleFileUpload = useCallback(async (uri) => {
+    try {
+      const storage = getStorage(app);
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const fileName = new Date().getTime() + ".jpg";
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, blob);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setImagePercent(Math.round(progress));
+        },
+        (error) => {
+          setImageError(true);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          setEventData((prevEventData) => ({
+            ...prevEventData,
+            image: downloadURL,
+          }));
+        }
+      );
+    } catch (error) {
+      console.log("File upload error: ", error);
+      setImageError(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (image) {
+      handleFileUpload(image);
+    }
+  }, [image, handleFileUpload]);
 
   const handleChange = (name, value) => {
     setEventData({ ...eventData, [name]: value });
@@ -126,7 +203,7 @@ const miesta = () => {
           coordinates: "",
           access: 0,
           date: "",
-          section: "kemp",
+          section: "camp",
           country: countries[0].name, // Reset to Slovakia
           favourite: false, // Reset favourite to false
         }); // Clear form data and reset to default country
@@ -166,7 +243,7 @@ const miesta = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/car2.png")}
+              source={require("@/assets/images/ADD.png")}
               style={{
                 width: wp(55),
                 height: wp(30),
@@ -182,7 +259,7 @@ const miesta = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/miesta.png")}
+              source={require("@/assets/images/places.png")}
               style={{
                 width: wp(55),
                 height: wp(30),
@@ -216,26 +293,24 @@ const miesta = () => {
                 <TextInput
                   type="text"
                   name="title"
+                  id="title"
                   value={eventData.title}
                   onChangeText={(text) => handleChange("title", text)}
-                  style={{
-                    paddingVertical: hp(1),
-                    paddingHorizontal: wp(2),
-                    color: "black",
-                  }}
+                  className="form-control block w-full p-2"
+                  placeholder="Title of the place..."
                 />
               </View>
             </View>
           </View>
+
           <View style={{ marginBottom: hp(2) }}>
             <View style={{ flexDirection: "row" }}>
               <Text
-                htmlFor="DESCRIPTION"
+                htmlFor="TITLE"
                 className="block text-sm font-medium leading-6 text-black-900"
               >
                 DESCRIPTION
               </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
             </View>
             <View style={{ marginTop: hp(1) }}>
               <View
@@ -249,130 +324,24 @@ const miesta = () => {
                 <TextInput
                   type="text"
                   name="description"
+                  id="description"
                   value={eventData.description}
                   onChangeText={(text) => handleChange("description", text)}
-                  style={{
-                    paddingHorizontal: wp(2),
-                    color: "black",
-                  }}
-                  numberOfLines={4}
+                  className="form-control block w-full p-2"
+                  placeholder="Description of the place..."
                   multiline={true}
                 />
               </View>
             </View>
           </View>
+
           <View style={{ marginBottom: hp(2) }}>
             <View style={{ flexDirection: "row" }}>
               <Text
-                htmlFor="UPLOAD IMAGE"
+                htmlFor="COUNTRY"
                 className="block text-sm font-medium leading-6 text-black-900"
               >
-                UPLOAD IMAGE
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                }}
-              >
-                <TextInput
-                  type="text"
-                  name="image"
-                  value={eventData.image}
-                  onChangeText={(text) => handleChange("image", text)}
-                  style={{
-                    paddingVertical: hp(1),
-                    paddingHorizontal: wp(2),
-                    color: "black",
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(1) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="Coordinates"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                Coordinates
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginVertical: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                }}
-              >
-                <TextInput
-                  type="text"
-                  name="coordinates"
-                  value={eventData.coordinates}
-                  onChangeText={(text) => handleChange("coordinates", text)}
-                  style={{
-                    paddingVertical: hp(1),
-                    paddingHorizontal: wp(2),
-                    color: "black",
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="Access"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                Access
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                }}
-              >
-                <Picker
-                  selectedValue={eventData.access}
-                  onValueChange={(value) => handleChange("access", value)}
-                  style={{
-                    paddingVertical: hp(1),
-                    paddingHorizontal: wp(2),
-                    color: "black",
-                  }}
-                >
-                  {accessOptions.map((option) => (
-                    <Picker.Item
-                      key={option.value}
-                      label={option.label}
-                      value={option.value}
-                    />
-                  ))}
-                </Picker>
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="Country"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                Country
+                COUNTRY
               </Text>
               <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
             </View>
@@ -386,83 +355,218 @@ const miesta = () => {
                 }}
               >
                 <SelectList
-                  setSelected={handleCountryChange}
+                  setSelected={(value) => handleCountryChange(value)}
                   data={countries}
                   save="value"
+                  placeholder="Select a country"
+                  searchPlaceholder="Search..."
+                  dropdownStyles={{ borderRadius: 0, borderWidth: 0 }}
                   boxStyles={{ borderRadius: 0, borderWidth: 0 }} // override default styles
-                  search={false}
-                  dropdownStyles={{ borderRadius: 0, borderWidth: 1 }}
+                  defaultOption={{
+                    key: eventData.country,
+                    value: eventData.country,
+                  }}
                 />
               </View>
             </View>
           </View>
+
           <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row", paddingBottom: 0 }}>
+            <View style={{ flexDirection: "row" }}>
               <Text
-                htmlFor="A DATE"
+                htmlFor="date"
                 className="block text-sm font-medium leading-6 text-black-900"
               >
-                A DATE
+                DATE
               </Text>
               <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
             </View>
-            <TouchableOpacity
-              onPress={showDatePicker}
-              style={{
-                borderWidth: 1,
-                borderColor: "#FFD800",
-                borderRadius: 2,
-                backgroundColor: "white",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <TextInput
-                value={eventData.date}
-                editable={false}
+            <View style={{ marginTop: hp(1) }}>
+              <View
                 style={{
-                  paddingVertical: hp(1),
-                  paddingHorizontal: wp(2),
-                  color: "black",
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 2,
+                  backgroundColor: "white",
+                  padding: 2,
                 }}
-              />
-              <AntDesign
-                name="calendar"
-                size={24}
-                color="#FFD800"
-                style={{
-                  paddingVertical: hp(1),
-                  paddingHorizontal: wp(2),
-                  alignSelf: "flex-end",
-                }}
-              />
-            </TouchableOpacity>
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleDateChange}
-              onCancel={hideDatePicker}
-            />
+              >
+                <TouchableOpacity onPress={showDatePicker}>
+                  <TextInput
+                    type="text"
+                    name="date"
+                    id="date"
+                    value={eventData.date}
+                    onChangeText={(text) => handleChange("date", text)}
+                    className="form-control block w-full p-2"
+                    placeholder="Select a date..."
+                    editable={false}
+                  />
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleDateChange}
+                  onCancel={hideDatePicker}
+                />
+              </View>
+            </View>
           </View>
 
-          <View
-            style={{
-              alignItems: "center",
-              marginBottom: 50,
-              justifyContent: "center",
-            }}
-          >
-            <TouchableOpacity
-              activeOpacity={1}
-              style={[styles.button2]}
-              onPress={handleSubmit}
-              disabled={isSubmitting}
-            >
-              <Text style={[styles.btnText2]}>
-                {isSubmitting ? "Submitting..." : "To Send"}
+          <View style={{ marginBottom: hp(2) }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                htmlFor="ACCESS"
+                className="block text-sm font-medium leading-6 text-black-900"
+              >
+                ACCESS
               </Text>
-            </TouchableOpacity>
+              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+            </View>
+            <View style={{ marginTop: hp(1) }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 2,
+                  backgroundColor: "white",
+                  padding: 2,
+                }}
+              >
+                <Picker
+                  selectedValue={eventData.access}
+                  onValueChange={(itemValue) =>
+                    handleChange("access", itemValue)
+                  }
+                >
+                  {accessOptions.map((option) => (
+                    <Picker.Item
+                      key={option.value}
+                      label={option.label}
+                      value={option.value}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            </View>
           </View>
+
+          <View style={{ marginBottom: hp(2) }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                htmlFor="MAP"
+                className="block text-sm font-medium leading-6 text-black-900"
+              >
+                MAP
+              </Text>
+            </View>
+            <View style={{ marginTop: hp(1) }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 2,
+                  backgroundColor: "white",
+                }}
+              >
+                <TextInput
+                  type="text"
+                  name="map"
+                  id="map"
+                  value={eventData.map}
+                  onChangeText={(text) => handleChange("map", text)}
+                  className="form-control block w-full p-2"
+                  placeholder="Map URL..."
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={{ marginBottom: hp(2) }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                htmlFor="COORDINATES"
+                className="block text-sm font-medium leading-6 text-black-900"
+              >
+                COORDINATES
+              </Text>
+              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+            </View>
+            <View style={{ marginTop: hp(1) }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 2,
+                  backgroundColor: "white",
+                }}
+              >
+                <TextInput
+                  type="text"
+                  name="coordinates"
+                  id="coordinates"
+                  value={eventData.coordinates}
+                  onChangeText={(text) => handleChange("coordinates", text)}
+                  className="form-control block w-full p-2"
+                  placeholder="Coordinates (latitude, longitude)..."
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={{ marginBottom: hp(2) }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                htmlFor="IMAGE"
+                className="block text-sm font-medium leading-6 text-black-900"
+              >
+                IMAGE
+              </Text>
+              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+            </View>
+            <View style={{ marginTop: hp(1) }}>
+              <TouchableOpacity onPress={handleImagePick}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "#FFD800",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                    padding: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {image ? (
+                    <Image
+                      source={{ uri: image }}
+                      style={{ width: 100, height: 100 }}
+                    />
+                  ) : (
+                    <AntDesign name="plus" size={24} color="black" />
+                  )}
+                </View>
+              </TouchableOpacity>
+              {imagePercent > 0 && (
+                <Text
+                  style={styles.uploadText}
+                >{`Uploading: ${imagePercent}%`}</Text>
+              )}
+              {imageError && (
+                <Text style={styles.errorText}>Image upload failed.</Text>
+              )}
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={handleSubmit}
+            disabled={isSubmitting}
+          >
+            <Text style={styles.submitButtonText}>
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </ScrollView>
@@ -470,74 +574,28 @@ const miesta = () => {
 };
 
 const styles = StyleSheet.create({
-  button: {
-    alignItems: "center",
-    backgroundColor: "#FFD800",
-    padding: 10,
-    borderRadius: 5,
-    paddingHorizontal: 30,
-  },
-  button2: {
-    alignItems: "center",
-    backgroundColor: "#FFD800",
-    padding: 10,
-    width: "100%",
-    borderRadius: 2.65,
-    elevation: 4,
-    marginTop: 25,
-  },
-  btnText: {
-    color: "black",
-    fontWeight: "bold",
-  },
-  btnText2: {
-    color: "black",
-    fontWeight: "bold",
-    fontSize: 15,
-  },
-  activeTab: {
-    backgroundColor: "black",
-  },
-  activeText: { color: "#FFD800" },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    width: "90%",
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button3: {
-    alignItems: "center",
-    backgroundColor: "#FFD800",
-    padding: 10,
-    width: "40%",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
   successText: {
     color: "green",
-    fontSize: 16,
-    textAlign: "center",
-    marginVertical: 10,
+    marginVertical: 5,
   },
   errorText: {
     color: "red",
-    fontSize: 16,
-    textAlign: "center",
-    marginVertical: 10,
+    marginVertical: 5,
+  },
+  uploadText: {
+    color: "blue",
+    marginVertical: 5,
+  },
+  submitButton: {
+    backgroundColor: "#FFD800",
+    borderRadius: 5,
+    padding: 10,
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  submitButtonText: {
+    color: "black",
+    fontWeight: "bold",
   },
 });
 

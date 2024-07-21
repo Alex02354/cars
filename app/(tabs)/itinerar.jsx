@@ -166,7 +166,7 @@ const itinerar = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/car2.png")}
+              source={require("@/assets/images/ADD.png")}
               style={{
                 width: wp(55),
                 height: wp(30),
@@ -182,7 +182,7 @@ const itinerar = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/itinerar.png")}
+              source={require("@/assets/images/itineraries.png")}
               style={{
                 width: wp(55),
                 height: wp(30),

@@ -49,7 +49,7 @@ const HomeScreen = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/car1.png")}
+              source={require("@/assets/images/discover.png")}
               style={{
                 width: wp(45),
                 height: wp(30),
@@ -64,10 +64,10 @@ const HomeScreen = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/car2.png")}
+              source={require("@/assets/images/ADD.png")}
               style={{
-                width: wp(45),
-                height: wp(30),
+                width: wp(41),
+                height: wp(29),
                 resizeMode: "contain",
               }}
             />

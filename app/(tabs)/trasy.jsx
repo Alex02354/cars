@@ -32,7 +32,7 @@ const trasy = () => {
     coordinates: "",
     access: 0,
     date: "",
-    section: "offroad",
+    section: "route",
     country: "Italy",
   };
 
@@ -126,7 +126,7 @@ const trasy = () => {
           coordinates: "",
           access: 0,
           date: "",
-          section: "offroad",
+          section: "route",
           country: countries[0].name, // Reset to Slovakia
           favourite: false, // Reset favourite to false
         }); // Clear form data and reset to default country
@@ -166,7 +166,7 @@ const trasy = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/car2.png")}
+              source={require("@/assets/images/ADD.png")}
               style={{
                 width: wp(55),
                 height: wp(30),
@@ -182,7 +182,7 @@ const trasy = () => {
             }}
           >
             <Image
-              source={require("@/assets/images/trasy.png")}
+              source={require("@/assets/images/routes.png")}
               style={{
                 width: wp(55),
                 height: wp(30),

@@ -31,7 +31,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
     coordinates: "",
     access: 0,
     date: "", // Date will be stored as a string
-    section: "kemp",
+    section: "camp",
     country: countries[0].name, // Default to Slovakia
     favourite: false, // Default favourite to false
   });
@@ -72,7 +72,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
         coordinates: "",
         access: 0,
         date: "",
-        section: "kemp",
+        section: "camp",
         country: countries[0].name, // Reset to Slovakia
         favourite: false, // Reset favourite to false
       }); // Clear form data and reset to default country
@@ -106,7 +106,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
       coordinates: "",
       access: 0,
       date: "",
-      section: "kemp",
+      section: "camp",
       country: countries[0].name, // Reset to Slovakia
       favourite: false, // Reset favourite to false
     });
@@ -193,7 +193,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
                   handleChange("section", itemValue)
                 }
               >
-                <Picker.Item label="kemp" value="kemp" />
+                <Picker.Item label="camp" value="camp" />
                 <Picker.Item label="places" value="places" />
                 <Picker.Item label="itinerary" value="itinerary" />
               </Picker>

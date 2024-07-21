@@ -16,7 +16,7 @@ const Pridat = () => {
       <View style={styles.container}>
         <View style={styles.centeredView}>
           <Image
-            source={require("@/assets/images/car2.png")}
+            source={require("@/assets/images/ADD.png")}
             style={styles.carImage}
           />
         </View>
@@ -29,7 +29,7 @@ const Pridat = () => {
             style={styles.touchable}
           >
             <Image
-              source={require("@/assets/images/miesta.png")}
+              source={require("@/assets/images/places.png")}
               style={styles.miestaImage}
             />
           </TouchableOpacity>
@@ -40,7 +40,7 @@ const Pridat = () => {
             style={styles.touchable}
           >
             <Image
-              source={require("@/assets/images/kempy.png")}
+              source={require("@/assets/images/camps.png")}
               style={styles.kempyImage}
             />
           </TouchableOpacity>
@@ -54,7 +54,7 @@ const Pridat = () => {
             style={styles.touchable}
           >
             <Image
-              source={require("@/assets/images/itinerar.png")}
+              source={require("@/assets/images/itineraries.png")}
               style={styles.itinerarImage}
             />
           </TouchableOpacity>
@@ -65,7 +65,7 @@ const Pridat = () => {
             style={styles.touchable}
           >
             <Image
-              source={require("@/assets/images/trasy.png")}
+              source={require("@/assets/images/routes.png")}
               style={styles.trasyImage}
             />
           </TouchableOpacity>

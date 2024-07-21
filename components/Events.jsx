@@ -136,7 +136,7 @@ const Events = ({
                   selectedTab === "ITINERARY" && styles.activeText,
                 ]}
               >
-                ITINERARY
+                ITINERARIES
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -171,39 +171,39 @@ const Events = ({
             <TouchableOpacity
               style={[
                 styles.button,
-                selectedTab === "KEMP" && styles.activeTab,
+                selectedTab === "CAMP" && styles.activeTab,
               ]}
               onPress={() => {
-                setSelectedSection("kemp");
-                handleTabPress("KEMP");
+                setSelectedSection("camp");
+                handleTabPress("CAMP");
               }}
             >
               <Text
                 style={[
                   styles.btnText,
-                  selectedTab === "KEMP" && styles.activeText,
+                  selectedTab === "CAMP" && styles.activeText,
                 ]}
               >
-                KEMP
+                CAMPS
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
                 styles.button,
-                selectedTab === "OFFROAD" && styles.activeTab,
+                selectedTab === "ROUTES" && styles.activeTab,
               ]}
               onPress={() => {
-                setSelectedSection("offroad");
-                handleTabPress("OFFROAD");
+                setSelectedSection("route");
+                handleTabPress("ROUTES");
               }}
             >
               <Text
                 style={[
                   styles.btnText,
-                  selectedTab === "OFFROAD" && styles.activeText,
+                  selectedTab === "ROUTES" && styles.activeText,
                 ]}
               >
-                OFFROAD
+                ROUTES
               </Text>
             </TouchableOpacity>
           </View>

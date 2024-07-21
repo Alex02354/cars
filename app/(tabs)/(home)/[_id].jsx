@@ -57,7 +57,7 @@ const EventDetail = () => {
       {coordinates && coordinates.length === 2 && (
         <MapComponent latitude={coordinates[0]} longitude={coordinates[1]} />
       )}
-      <Text>Route:</Text>
+
       {map && map.trim() !== "" && (
         <Image
           source={{ uri: map }}

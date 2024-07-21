@@ -35,7 +35,7 @@ const Trasy2 = () => {
           }}
         >
           <Image
-            source={require("@/assets/images/trasy.png")}
+            source={require("@/assets/images/routes.png")}
             style={{
               width: wp(55),
               height: wp(30),
@@ -75,7 +75,7 @@ const Trasy2 = () => {
           currentUserId={null}
           showAddEventButton={false}
           showSectionFilters={false}
-          filterSection="offroad" // Pass the filterSection prop to Events
+          filterSection="route" // Pass the filterSection prop to Events
           hideSectionFilters={true} // New prop to hide section filter buttons
         />
       } // Render Events here directly when there is no data

@@ -35,7 +35,7 @@ const Miesta2 = () => {
           }}
         >
           <Image
-            source={require("@/assets/images/miesta.png")}
+            source={require("@/assets/images/places.png")}
             style={{
               width: wp(55),
               height: wp(30),
