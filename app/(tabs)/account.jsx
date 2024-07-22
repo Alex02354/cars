@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  StatusBar,
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -19,8 +20,9 @@ const Account = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
   const user = useSelector((state) => state.user.currentUser); // Replace with the actual path to the user in your Redux state
 
-  const renderHeader = () => (
+  return (
     <>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
       <Image
         source={require("@/assets/images/header.jpg")}
         style={{
@@ -31,37 +33,9 @@ const Account = () => {
           marginBottom: "6%",
         }}
       />
-      <View style={{ marginHorizontal: "11%" }}></View>
+      <Events currentUserId={user._id} showAddEventButton={false} />
+      <StatusBar style="auto" />
     </>
-  );
-
-  const renderFooter = () => (
-    <View
-      style={{
-        alignItems: "center",
-        marginBottom: 50,
-        justifyContent: "center",
-      }}
-    >
-      <TouchableOpacity activeOpacity={1} style={[styles.button2]}>
-        <Text style={[styles.btnText2]}>View More</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  return (
-    <FlatList
-      data={[]} // An empty array to ensure the FlatList renders
-      keyExtractor={(item, index) => index.toString()}
-      ListHeaderComponent={renderHeader}
-      ListFooterComponent={renderFooter}
-      renderItem={null}
-      ListHeaderComponentStyle={{ flex: 1 }}
-      ListFooterComponentStyle={{ flex: 1 }}
-      ListEmptyComponent={
-        <Events currentUserId={user._id} showAddEventButton={false} />
-      } // Pass the current user ID to the Events component
-    />
   );
 };
 

@@ -21,7 +21,6 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Divider from "../../components/Divider";
-import { Picker } from "@react-native-picker/picker";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import {
@@ -59,16 +58,16 @@ const miesta = () => {
   const router = useRouter();
 
   const countries = [
-    { key: "1", value: "Slovakia" },
-    { key: "2", value: "France" },
-    { key: "3", value: "Czech Republic" },
-    { key: "4", value: "Italy" },
+    { key: "Slovakia", value: "Slovakia" },
+    { key: "France", value: "France" },
+    { key: "Czech Republic", value: "Czech Republic" },
+    { key: "Italy", value: "Italy" },
   ];
 
   const accessOptions = [
-    { label: "Caravan", value: 0 },
-    { label: "Car", value: 1 },
-    { label: "Off-road", value: 2 },
+    { key: 0, value: "Caravan" },
+    { key: 1, value: "Car" },
+    { key: 2, value: "Off-road" },
   ];
 
   useEffect(() => {
@@ -145,6 +144,10 @@ const miesta = () => {
     setEventData({ ...eventData, country: value });
   };
 
+  const handleAccessChange = (value) => {
+    setEventData({ ...eventData, access: value });
+  };
+
   const handleDateChange = (selectedDate) => {
     const formattedDate = selectedDate.toISOString().split("T")[0]; // Format as per MongoDB date format (YYYY-MM-DD)
     setEventData({ ...eventData, date: formattedDate });
@@ -162,7 +165,14 @@ const miesta = () => {
   const handleSubmit = async () => {
     const { title, image, date, coordinates, access, country } = eventData;
 
-    if (!title || !image || !date || !coordinates || !access || !country) {
+    if (
+      !title ||
+      !image ||
+      !date ||
+      !coordinates ||
+      access === "" ||
+      !country
+    ) {
       setErrorMessage("Please fill in all required fields.");
       return;
     }
@@ -296,21 +306,20 @@ const miesta = () => {
                   id="title"
                   value={eventData.title}
                   onChangeText={(text) => handleChange("title", text)}
-                  className="form-control block w-full p-2"
-                  placeholder="Title of the place..."
+                  className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </View>
             </View>
           </View>
-
           <View style={{ marginBottom: hp(2) }}>
             <View style={{ flexDirection: "row" }}>
               <Text
-                htmlFor="TITLE"
+                htmlFor="DESCRIPTION"
                 className="block text-sm font-medium leading-6 text-black-900"
               >
                 DESCRIPTION
               </Text>
+              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
             </View>
             <View style={{ marginTop: hp(1) }}>
               <View
@@ -322,135 +331,53 @@ const miesta = () => {
                 }}
               >
                 <TextInput
+                  multiline={true}
                   type="text"
                   name="description"
                   id="description"
                   value={eventData.description}
                   onChangeText={(text) => handleChange("description", text)}
-                  className="form-control block w-full p-2"
-                  placeholder="Description of the place..."
-                  multiline={true}
+                  className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </View>
             </View>
           </View>
-
           <View style={{ marginBottom: hp(2) }}>
             <View style={{ flexDirection: "row" }}>
               <Text
-                htmlFor="COUNTRY"
+                htmlFor="IMAGE"
                 className="block text-sm font-medium leading-6 text-black-900"
               >
-                COUNTRY
+                IMAGE
               </Text>
               <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
             </View>
             <View style={{ marginTop: hp(1) }}>
-              <View
+              <TouchableOpacity
+                onPress={handleImagePick}
                 style={{
                   borderWidth: 1,
                   borderColor: "#FFD800",
                   borderRadius: 2,
                   backgroundColor: "white",
+                  padding: 10,
                 }}
               >
-                <SelectList
-                  setSelected={(value) => handleCountryChange(value)}
-                  data={countries}
-                  save="value"
-                  placeholder="Select a country"
-                  searchPlaceholder="Search..."
-                  dropdownStyles={{ borderRadius: 0, borderWidth: 0 }}
-                  boxStyles={{ borderRadius: 0, borderWidth: 0 }} // override default styles
-                  defaultOption={{
-                    key: eventData.country,
-                    value: eventData.country,
+                <Text>Pick an image</Text>
+              </TouchableOpacity>
+              {image && (
+                <Image
+                  source={{ uri: image }}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    resizeMode: "contain",
+                    marginTop: 10,
                   }}
                 />
-              </View>
+              )}
             </View>
           </View>
-
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="date"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                DATE
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                  padding: 2,
-                }}
-              >
-                <TouchableOpacity onPress={showDatePicker}>
-                  <TextInput
-                    type="text"
-                    name="date"
-                    id="date"
-                    value={eventData.date}
-                    onChangeText={(text) => handleChange("date", text)}
-                    className="form-control block w-full p-2"
-                    placeholder="Select a date..."
-                    editable={false}
-                  />
-                </TouchableOpacity>
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  onConfirm={handleDateChange}
-                  onCancel={hideDatePicker}
-                />
-              </View>
-            </View>
-          </View>
-
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="ACCESS"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                ACCESS
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                  padding: 2,
-                }}
-              >
-                <Picker
-                  selectedValue={eventData.access}
-                  onValueChange={(itemValue) =>
-                    handleChange("access", itemValue)
-                  }
-                >
-                  {accessOptions.map((option) => (
-                    <Picker.Item
-                      key={option.value}
-                      label={option.label}
-                      value={option.value}
-                    />
-                  ))}
-                </Picker>
-              </View>
-            </View>
-          </View>
-
           <View style={{ marginBottom: hp(2) }}>
             <View style={{ flexDirection: "row" }}>
               <Text
@@ -475,13 +402,11 @@ const miesta = () => {
                   id="map"
                   value={eventData.map}
                   onChangeText={(text) => handleChange("map", text)}
-                  className="form-control block w-full p-2"
-                  placeholder="Map URL..."
+                  className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </View>
             </View>
           </View>
-
           <View style={{ marginBottom: hp(2) }}>
             <View style={{ flexDirection: "row" }}>
               <Text
@@ -507,66 +432,118 @@ const miesta = () => {
                   id="coordinates"
                   value={eventData.coordinates}
                   onChangeText={(text) => handleChange("coordinates", text)}
-                  className="form-control block w-full p-2"
-                  placeholder="Coordinates (latitude, longitude)..."
+                  className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </View>
             </View>
           </View>
-
           <View style={{ marginBottom: hp(2) }}>
             <View style={{ flexDirection: "row" }}>
               <Text
-                htmlFor="IMAGE"
+                htmlFor="COUNTRY"
                 className="block text-sm font-medium leading-6 text-black-900"
               >
-                IMAGE
+                COUNTRY
               </Text>
               <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
             </View>
             <View style={{ marginTop: hp(1) }}>
-              <TouchableOpacity onPress={handleImagePick}>
-                <View
-                  style={{
-                    borderWidth: 1,
-                    borderColor: "#FFD800",
-                    borderRadius: 2,
-                    backgroundColor: "white",
-                    padding: 10,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {image ? (
-                    <Image
-                      source={{ uri: image }}
-                      style={{ width: 100, height: 100 }}
-                    />
-                  ) : (
-                    <AntDesign name="plus" size={24} color="black" />
-                  )}
-                </View>
-              </TouchableOpacity>
-              {imagePercent > 0 && (
-                <Text
-                  style={styles.uploadText}
-                >{`Uploading: ${imagePercent}%`}</Text>
-              )}
-              {imageError && (
-                <Text style={styles.errorText}>Image upload failed.</Text>
-              )}
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 2,
+                  backgroundColor: "white",
+                }}
+              >
+                <SelectList
+                  data={countries}
+                  setSelected={handleCountryChange}
+                  placeholder="Select Country"
+                  searchPlaceholder="Search"
+                  dropdownStyles={{ borderColor: "#FFD800", borderWidth: 1 }}
+                  inputStyles={{ color: "black" }}
+                />
+              </View>
             </View>
           </View>
-
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={handleSubmit}
-            disabled={isSubmitting}
-          >
-            <Text style={styles.submitButtonText}>
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </Text>
-          </TouchableOpacity>
+          <View style={{ marginBottom: hp(2) }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                htmlFor="ACCESS"
+                className="block text-sm font-medium leading-6 text-black-900"
+              >
+                ACCESS
+              </Text>
+              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+            </View>
+            <View style={{ marginTop: hp(1) }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 2,
+                  backgroundColor: "white",
+                }}
+              >
+                <SelectList
+                  data={accessOptions}
+                  setSelected={handleAccessChange}
+                  placeholder="Select Access"
+                  search={false}
+                  dropdownStyles={{ borderColor: "#FFD800", borderWidth: 1 }}
+                  inputStyles={{ color: "black" }}
+                />
+              </View>
+            </View>
+          </View>
+          <View style={{ marginBottom: hp(2) }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                htmlFor="DATE"
+                className="block text-sm font-medium leading-6 text-black-900"
+              >
+                DATE
+              </Text>
+              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+            </View>
+            <View style={{ marginTop: hp(1) }}>
+              <TouchableOpacity
+                onPress={showDatePicker}
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 2,
+                  backgroundColor: "white",
+                  padding: 10,
+                }}
+              >
+                <Text>{eventData.date || "Select Date"}</Text>
+              </TouchableOpacity>
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleDateChange}
+                onCancel={hideDatePicker}
+              />
+            </View>
+          </View>
+          <View style={{ marginBottom: hp(2) }}>
+            <TouchableOpacity
+              onPress={handleSubmit}
+              style={{
+                backgroundColor: "#FFD800",
+                borderRadius: 5,
+                padding: 10,
+                alignItems: "center",
+              }}
+              disabled={isSubmitting}
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     </ScrollView>
@@ -576,26 +553,13 @@ const miesta = () => {
 const styles = StyleSheet.create({
   successText: {
     color: "green",
-    marginVertical: 5,
+    fontSize: 16,
+    marginBottom: 10,
   },
   errorText: {
     color: "red",
-    marginVertical: 5,
-  },
-  uploadText: {
-    color: "blue",
-    marginVertical: 5,
-  },
-  submitButton: {
-    backgroundColor: "#FFD800",
-    borderRadius: 5,
-    padding: 10,
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  submitButtonText: {
-    color: "black",
-    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 10,
   },
 });
 

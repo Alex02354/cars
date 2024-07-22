@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   Modal,
   StyleSheet,
+  RefreshControl,
 } from "react-native";
 import axios from "axios";
 import {
@@ -41,7 +42,7 @@ const Events = ({
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedSection, setSelectedSection] = useState(filterSection);
   const [selectedTab, setSelectedTab] = useState("ALL");
-
+  const [refreshing, setRefreshing] = React.useState(false);
   const handleTabPress = (tabName) => {
     setSelectedTab(tabName);
   };
@@ -72,6 +73,11 @@ const Events = ({
   const addEventToList = (newEvent) => {
     setEvents([newEvent, ...events]);
   };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchEvents().then(() => setRefreshing(false));
+  }, []);
 
   const handleCountrySelect = (country) => {
     setSelectedCountry(country);
@@ -171,17 +177,17 @@ const Events = ({
             <TouchableOpacity
               style={[
                 styles.button,
-                selectedTab === "CAMP" && styles.activeTab,
+                selectedTab === "KEMP" && styles.activeTab,
               ]}
               onPress={() => {
                 setSelectedSection("camp");
-                handleTabPress("CAMP");
+                handleTabPress("KEMP");
               }}
             >
               <Text
                 style={[
                   styles.btnText,
-                  selectedTab === "CAMP" && styles.activeText,
+                  selectedTab === "KEMP" && styles.activeText,
                 ]}
               >
                 CAMPS
@@ -190,17 +196,17 @@ const Events = ({
             <TouchableOpacity
               style={[
                 styles.button,
-                selectedTab === "ROUTES" && styles.activeTab,
+                selectedTab === "OFFROAD" && styles.activeTab,
               ]}
               onPress={() => {
                 setSelectedSection("route");
-                handleTabPress("ROUTES");
+                handleTabPress("OFFROAD");
               }}
             >
               <Text
                 style={[
                   styles.btnText,
-                  selectedTab === "ROUTES" && styles.activeText,
+                  selectedTab === "OFFROAD" && styles.activeText,
                 ]}
               >
                 ROUTES
@@ -265,6 +271,9 @@ const Events = ({
         numColumns={2}
         keyExtractor={(item, index) => item._id + index}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         contentContainerStyle={{ paddingBottom: 20, paddingTop: 10 }}
         columnWrapperStyle={{ justifyContent: "center" }}
         renderItem={({ item, index }) => (
