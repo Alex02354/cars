@@ -10,6 +10,7 @@ import {
   ScrollView,
   Modal,
   Alert,
+  StatusBar,
 } from "react-native";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -229,324 +230,330 @@ const miesta = () => {
   };
 
   return (
-    <ScrollView
-      style={{
-        flex: 1,
-        flexDirection: "column" /* backgroundColor: "#BCBCBB" */,
-      }}
-    >
-      <Image
-        source={require("@/assets/images/header.jpg")}
+    <>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
+      <ScrollView
         style={{
-          width: wp(100),
-          height: wp(37),
-          resizeMode: "contain",
-          marginTop: "6%",
+          flex: 1,
+          flexDirection: "column" /* backgroundColor: "#BCBCBB" */,
         }}
-      />
-      <SafeAreaView>
-        <View className="mx-10">
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Image
-              source={require("@/assets/images/ADD.png")}
+      >
+        <Image
+          source={require("@/assets/images/header.jpg")}
+          style={{
+            width: wp(100),
+            height: wp(37),
+            resizeMode: "contain",
+            marginTop: "6%",
+          }}
+        />
+        <SafeAreaView>
+          <View className="mx-10">
+            <View
               style={{
-                width: wp(55),
-                height: wp(30),
-                resizeMode: "contain",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
-          </View>
-          <Divider />
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Image
-              source={require("@/assets/images/places.png")}
-              style={{
-                width: wp(55),
-                height: wp(30),
-                resizeMode: "contain",
-              }}
-            />
-          </View>
-          {successMessage && (
-            <Text style={styles.successText}>{successMessage}</Text>
-          )}
-          {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="TITLE"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                TITLE
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
+            >
+              <Image
+                source={require("@/assets/images/ADD.png")}
                 style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
+                  width: wp(55),
+                  height: wp(30),
+                  resizeMode: "contain",
                 }}
-              >
-                <TextInput
-                  type="text"
-                  name="title"
-                  id="title"
-                  value={eventData.title}
-                  onChangeText={(text) => handleChange("title", text)}
-                  className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="DESCRIPTION"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                DESCRIPTION
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                }}
-              >
-                <TextInput
-                  multiline={true}
-                  type="text"
-                  name="description"
-                  id="description"
-                  value={eventData.description}
-                  onChangeText={(text) => handleChange("description", text)}
-                  className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="IMAGE"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                IMAGE
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <TouchableOpacity
-                onPress={handleImagePick}
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                  padding: 10,
-                }}
-              >
-                <Text>Pick an image</Text>
-              </TouchableOpacity>
-              {image && (
-                <Image
-                  source={{ uri: image }}
-                  style={{
-                    width: 100,
-                    height: 100,
-                    resizeMode: "contain",
-                    marginTop: 10,
-                  }}
-                />
-              )}
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="MAP"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                MAP
-              </Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                }}
-              >
-                <TextInput
-                  type="text"
-                  name="map"
-                  id="map"
-                  value={eventData.map}
-                  onChangeText={(text) => handleChange("map", text)}
-                  className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="COORDINATES"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                COORDINATES
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                }}
-              >
-                <TextInput
-                  type="text"
-                  name="coordinates"
-                  id="coordinates"
-                  value={eventData.coordinates}
-                  onChangeText={(text) => handleChange("coordinates", text)}
-                  className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="COUNTRY"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                COUNTRY
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                }}
-              >
-                <SelectList
-                  data={countries}
-                  setSelected={handleCountryChange}
-                  placeholder="Select Country"
-                  searchPlaceholder="Search"
-                  dropdownStyles={{ borderColor: "#FFD800", borderWidth: 1 }}
-                  inputStyles={{ color: "black" }}
-                />
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="ACCESS"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                ACCESS
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                }}
-              >
-                <SelectList
-                  data={accessOptions}
-                  setSelected={handleAccessChange}
-                  placeholder="Select Access"
-                  search={false}
-                  dropdownStyles={{ borderColor: "#FFD800", borderWidth: 1 }}
-                  inputStyles={{ color: "black" }}
-                />
-              </View>
-            </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                htmlFor="DATE"
-                className="block text-sm font-medium leading-6 text-black-900"
-              >
-                DATE
-              </Text>
-              <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
-            </View>
-            <View style={{ marginTop: hp(1) }}>
-              <TouchableOpacity
-                onPress={showDatePicker}
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#FFD800",
-                  borderRadius: 2,
-                  backgroundColor: "white",
-                  padding: 10,
-                }}
-              >
-                <Text>{eventData.date || "Select Date"}</Text>
-              </TouchableOpacity>
-              <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode="date"
-                onConfirm={handleDateChange}
-                onCancel={hideDatePicker}
               />
             </View>
-          </View>
-          <View style={{ marginBottom: hp(2) }}>
-            <TouchableOpacity
-              onPress={handleSubmit}
+            <Divider />
+            <View
               style={{
-                backgroundColor: "#FFD800",
-                borderRadius: 5,
-                padding: 10,
                 alignItems: "center",
+                justifyContent: "center",
               }}
-              disabled={isSubmitting}
             >
-              <Text style={{ color: "white", fontWeight: "bold" }}>
-                {isSubmitting ? "Submitting..." : "Submit"}
-              </Text>
-            </TouchableOpacity>
+              <Image
+                source={require("@/assets/images/places.png")}
+                style={{
+                  width: wp(55),
+                  height: wp(30),
+                  resizeMode: "contain",
+                }}
+              />
+            </View>
+            {successMessage && (
+              <Text style={styles.successText}>{successMessage}</Text>
+            )}
+            {errorMessage && (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            )}
+            <View style={{ marginBottom: hp(2) }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  htmlFor="TITLE"
+                  className="block text-sm font-medium leading-6 text-black-900"
+                >
+                  TITLE
+                </Text>
+                <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+              </View>
+              <View style={{ marginTop: hp(1) }}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "#FFD800",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  }}
+                >
+                  <TextInput
+                    type="text"
+                    name="title"
+                    id="title"
+                    value={eventData.title}
+                    onChangeText={(text) => handleChange("title", text)}
+                    className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={{ marginBottom: hp(2) }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  htmlFor="DESCRIPTION"
+                  className="block text-sm font-medium leading-6 text-black-900"
+                >
+                  DESCRIPTION
+                </Text>
+                <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+              </View>
+              <View style={{ marginTop: hp(1) }}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "#FFD800",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  }}
+                >
+                  <TextInput
+                    multiline={true}
+                    type="text"
+                    name="description"
+                    id="description"
+                    value={eventData.description}
+                    onChangeText={(text) => handleChange("description", text)}
+                    className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={{ marginBottom: hp(2) }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  htmlFor="IMAGE"
+                  className="block text-sm font-medium leading-6 text-black-900"
+                >
+                  IMAGE
+                </Text>
+                <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+              </View>
+              <View style={{ marginTop: hp(1) }}>
+                <TouchableOpacity
+                  onPress={handleImagePick}
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "#FFD800",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                    padding: 10,
+                  }}
+                >
+                  <Text>Pick an image</Text>
+                </TouchableOpacity>
+                {image && (
+                  <Image
+                    source={{ uri: image }}
+                    style={{
+                      width: 100,
+                      height: 100,
+                      resizeMode: "contain",
+                      marginTop: 10,
+                    }}
+                  />
+                )}
+              </View>
+            </View>
+            <View style={{ marginBottom: hp(2) }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  htmlFor="MAP"
+                  className="block text-sm font-medium leading-6 text-black-900"
+                >
+                  MAP
+                </Text>
+              </View>
+              <View style={{ marginTop: hp(1) }}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "#FFD800",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  }}
+                >
+                  <TextInput
+                    type="text"
+                    name="map"
+                    id="map"
+                    value={eventData.map}
+                    onChangeText={(text) => handleChange("map", text)}
+                    className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={{ marginBottom: hp(2) }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  htmlFor="COORDINATES"
+                  className="block text-sm font-medium leading-6 text-black-900"
+                >
+                  COORDINATES
+                </Text>
+                <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+              </View>
+              <View style={{ marginTop: hp(1) }}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "#FFD800",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  }}
+                >
+                  <TextInput
+                    type="text"
+                    name="coordinates"
+                    id="coordinates"
+                    value={eventData.coordinates}
+                    onChangeText={(text) => handleChange("coordinates", text)}
+                    className="block w-full rounded-md py-1.5 text-black-900 shadow-sm ring-1 ring-inset ring-black-300 placeholder:text-black-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={{ marginBottom: hp(2) }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  htmlFor="COUNTRY"
+                  className="block text-sm font-medium leading-6 text-black-900"
+                >
+                  COUNTRY
+                </Text>
+                <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+              </View>
+              <View style={{ marginTop: hp(1) }}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "#FFD800",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  }}
+                >
+                  <SelectList
+                    data={countries}
+                    setSelected={handleCountryChange}
+                    placeholder="Select Country"
+                    searchPlaceholder="Search"
+                    dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
+                    inputStyles={{ color: "black" }}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={{ marginBottom: hp(2) }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  htmlFor="ACCESS"
+                  className="block text-sm font-medium leading-6 text-black-900"
+                >
+                  ACCESS
+                </Text>
+                <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+              </View>
+              <View style={{ marginTop: hp(1) }}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "#FFD800",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                  }}
+                >
+                  <SelectList
+                    data={accessOptions}
+                    setSelected={handleAccessChange}
+                    placeholder="Select Access"
+                    search={false}
+                    dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
+                    inputStyles={{ color: "black" }}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={{ marginBottom: hp(2) }}>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  htmlFor="DATE"
+                  className="block text-sm font-medium leading-6 text-black-900"
+                >
+                  DATE
+                </Text>
+                <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
+              </View>
+              <View style={{ marginTop: hp(1) }}>
+                <TouchableOpacity
+                  onPress={showDatePicker}
+                  style={{
+                    borderWidth: 1,
+                    borderColor: "#FFD800",
+                    borderRadius: 2,
+                    backgroundColor: "white",
+                    padding: 10,
+                  }}
+                >
+                  <Text>{eventData.date || "Select Date"}</Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleDateChange}
+                  onCancel={hideDatePicker}
+                />
+              </View>
+            </View>
+            <View style={{ marginBottom: hp(2) }}>
+              <TouchableOpacity
+                onPress={handleSubmit}
+                style={{
+                  backgroundColor: "#FFD800",
+                  borderRadius: 5,
+                  padding: 10,
+                  alignItems: "center",
+                }}
+                disabled={isSubmitting}
+              >
+                <Text style={{ color: "white", fontWeight: "bold" }}>
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+        </SafeAreaView>
+      </ScrollView>
+      <StatusBar style="auto" />
+    </>
   );
 };
 

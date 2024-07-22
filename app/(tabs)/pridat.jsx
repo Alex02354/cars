@@ -1,5 +1,11 @@
 import React from "react";
-import { Image, StyleSheet, View, TouchableOpacity } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { useRouter } from "expo-router";
 import Divider from "../../components/Divider";
@@ -9,6 +15,7 @@ const Pridat = () => {
 
   return (
     <>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
       <Image
         source={require("@/assets/images/header.jpg")}
         style={styles.headerImage}
@@ -71,6 +78,7 @@ const Pridat = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <StatusBar style="auto" />
     </>
   );
 };

@@ -129,14 +129,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: "#007BFF",
-    padding: 10,
-    borderRadius: 5,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    backgroundColor: "#FFD800",
+    borderRadius: 6,
+    justifyContent: "center",
     alignItems: "center",
   },
   buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
+    fontSize: 16,
+    color: "#000",
+    fontWeight: "600",
   },
   footer: {
     flexDirection: "row",

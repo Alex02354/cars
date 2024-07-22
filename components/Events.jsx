@@ -8,6 +8,7 @@ import {
   Modal,
   StyleSheet,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import axios from "axios";
 import {
@@ -94,7 +95,7 @@ const Events = ({
     return countryMatches && sectionMatches;
   });
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading) return <ActivityIndicator />;
   if (error) return <Text>Error: {error}</Text>;
 
   return (

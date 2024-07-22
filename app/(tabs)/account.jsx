@@ -30,7 +30,7 @@ const Account = () => {
           height: wp(37),
           resizeMode: "contain",
           marginTop: "6%",
-          marginBottom: "6%",
+          marginBottom: "3%",
         }}
       />
       <Events currentUserId={user._id} showAddEventButton={false} />
