@@ -383,7 +383,7 @@ const kemp = () => {
                 )}
               </View>
             </View>
-            <View style={{ marginBottom: hp(2) }}>
+            {/* <View style={{ marginBottom: hp(2) }}>
               <View style={{ flexDirection: "row" }}>
                 <Text
                   htmlFor="MAP"
@@ -411,7 +411,7 @@ const kemp = () => {
                   />
                 </View>
               </View>
-            </View>
+            </View> */}
             <View style={{ marginBottom: hp(2) }}>
               <View style={{ flexDirection: "row" }}>
                 <Text
