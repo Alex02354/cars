@@ -7,7 +7,6 @@ import {
   Image,
   StyleSheet,
   Alert,
-  StatusBar,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
@@ -165,85 +164,79 @@ const Profile = () => {
   };
 
   return (
-    <>
-      <StatusBar backgroundColor="black" barStyle="light-content" />
-      <View style={styles.container}>
-        <Text style={styles.title}>Profile</Text>
-        {currentUser && (
-          <>
-            <TouchableOpacity onPress={handleImagePick}>
-              <Image
-                source={{
-                  uri: formData.profilePicture || currentUser.profilePicture,
-                }}
-                style={styles.profilePicture}
-              />
-            </TouchableOpacity>
-            <Text style={styles.uploadStatus}>
-              {imageError ? (
-                <Text style={styles.errorText}>
-                  Error uploading image (file size must be less than 2 MB)
-                </Text>
-              ) : imagePercent > 0 && imagePercent < 100 ? (
-                <Text
-                  style={styles.uploadingText}
-                >{`Uploading: ${imagePercent} %`}</Text>
-              ) : imagePercent === 100 ? (
-                <Text style={styles.successText}>
-                  Image uploaded successfully
-                </Text>
-              ) : (
-                ""
-              )}
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Username"
-              defaultValue={currentUser.username}
-              onChangeText={(text) => handleChange("username", text)}
+    <View style={styles.container}>
+      <Text style={styles.title}>Profile</Text>
+      {currentUser && (
+        <>
+          <TouchableOpacity onPress={handleImagePick}>
+            <Image
+              source={{
+                uri: formData.profilePicture || currentUser.profilePicture,
+              }}
+              style={styles.profilePicture}
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              defaultValue={currentUser.email}
-              onChangeText={(text) => handleChange("email", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              secureTextEntry
-              onChangeText={(text) => handleChange("password", text)}
-            />
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleSubmit}
-              disabled={loading}
-            >
-              <Text style={styles.buttonText}>
-                {loading ? "Loading..." : "Update"}
+          </TouchableOpacity>
+          <Text style={styles.uploadStatus}>
+            {imageError ? (
+              <Text style={styles.errorText}>
+                Error uploading image (file size must be less than 2 MB)
               </Text>
-            </TouchableOpacity>
-            <View style={styles.actions}>
-              <TouchableOpacity onPress={handleDeleteAccount}>
-                <Text style={styles.deleteText}>Delete Account</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleSignOut}>
-                <Text style={styles.signOutText}>Sign out</Text>
-              </TouchableOpacity>
-            </View>
-            {error && (
-              <Text style={styles.errorText}>Something went wrong!</Text>
-            )}
-            {updateSuccess && (
+            ) : imagePercent > 0 && imagePercent < 100 ? (
+              <Text
+                style={styles.uploadingText}
+              >{`Uploading: ${imagePercent} %`}</Text>
+            ) : imagePercent === 100 ? (
               <Text style={styles.successText}>
-                User is updated successfully!
+                Image uploaded successfully
               </Text>
+            ) : (
+              ""
             )}
-          </>
-        )}
-      </View>
-      <StatusBar style="auto" />
-    </>
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            defaultValue={currentUser.username}
+            onChangeText={(text) => handleChange("username", text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            defaultValue={currentUser.email}
+            onChangeText={(text) => handleChange("email", text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            onChangeText={(text) => handleChange("password", text)}
+          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSubmit}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+              {loading ? "Loading..." : "Update"}
+            </Text>
+          </TouchableOpacity>
+          <View style={styles.actions}>
+            <TouchableOpacity onPress={handleDeleteAccount}>
+              <Text style={styles.deleteText}>Delete Account</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleSignOut}>
+              <Text style={styles.signOutText}>Sign out</Text>
+            </TouchableOpacity>
+          </View>
+          {error && <Text style={styles.errorText}>Something went wrong!</Text>}
+          {updateSuccess && (
+            <Text style={styles.successText}>
+              User is updated successfully!
+            </Text>
+          )}
+        </>
+      )}
+    </View>
   );
 };
 

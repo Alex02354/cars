@@ -466,6 +466,7 @@ const miesta = () => {
                     setSelected={handleCountryChange}
                     placeholder="Select Country"
                     searchPlaceholder="Search"
+                    boxStyles={{ borderWidth: 0 }}
                     dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
                     inputStyles={{ color: "black" }}
                   />
@@ -496,6 +497,7 @@ const miesta = () => {
                     setSelected={handleAccessChange}
                     placeholder="Select Access"
                     search={false}
+                    boxStyles={{ borderWidth: 0 }}
                     dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
                     inputStyles={{ color: "black" }}
                   />

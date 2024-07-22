@@ -466,7 +466,8 @@ const kemp = () => {
                     setSelected={handleCountryChange}
                     placeholder="Select Country"
                     searchPlaceholder="Search"
-                    dropdownStyles={{ borderColor: "#FFD800", borderWidth: 1 }}
+                    boxStyles={{ borderWidth: 0 }}
+                    dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
                     inputStyles={{ color: "black" }}
                   />
                 </View>
@@ -496,7 +497,8 @@ const kemp = () => {
                     setSelected={handleAccessChange}
                     placeholder="Select Access"
                     search={false}
-                    dropdownStyles={{ borderColor: "#FFD800", borderWidth: 1 }}
+                    boxStyles={{ borderWidth: 0 }}
+                    dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
                     inputStyles={{ color: "black" }}
                   />
                 </View>

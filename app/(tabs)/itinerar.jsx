@@ -301,6 +301,7 @@ const itinerar = () => {
                     borderWidth: 1,
                     borderColor: "#FFD800",
                     borderRadius: 6,
+                    backgroundColor: "white",
                   }}
                 >
                   <TextInput
@@ -331,6 +332,7 @@ const itinerar = () => {
                     borderWidth: 1,
                     borderColor: "#FFD800",
                     borderRadius: 6,
+                    backgroundColor: "white",
                   }}
                 >
                   <TextInput
@@ -418,7 +420,15 @@ const itinerar = () => {
                 </Text>
                 <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
               </View>
-              <View style={{ marginTop: hp(1) }}>
+              <View
+                style={{
+                  marginTop: hp(1),
+                  borderWidth: 0,
+                  borderColor: "#FFD800",
+
+                  backgroundColor: "white",
+                }}
+              >
                 <TouchableOpacity onPress={showDatePicker}>
                   <Text style={styles.dateText}>
                     {eventData.date ? eventData.date : "Select Date"}
@@ -447,7 +457,8 @@ const itinerar = () => {
                   style={{
                     borderWidth: 1,
                     borderColor: "#FFD800",
-                    borderRadius: 6,
+                    borderRadius: 2,
+                    backgroundColor: "white",
                   }}
                 >
                   <TextInput
@@ -473,12 +484,23 @@ const itinerar = () => {
                 </Text>
                 <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
               </View>
-              <View style={{ marginTop: hp(1) }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 2,
+                  backgroundColor: "white",
+                }}
+              >
                 <SelectList
                   setSelected={handleAccessChange}
                   data={accessOptions}
                   save="key"
                   defaultOption={accessOptions[0]}
+                  boxStyles={{ borderWidth: 0 }}
+                  dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
+                  inputStyles={{ color: "black" }}
+                  placeholder="Select Access"
                 />
               </View>
             </View>
@@ -492,12 +514,24 @@ const itinerar = () => {
                 </Text>
                 <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
               </View>
-              <View style={{ marginTop: hp(1) }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 2,
+                  backgroundColor: "white",
+                }}
+              >
                 <SelectList
                   setSelected={handleCountryChange}
                   data={countries}
                   save="key"
                   defaultOption={countries[0]}
+                  boxStyles={{ borderWidth: 0 }}
+                  dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
+                  inputStyles={{ color: "black" }}
+                  placeholder="Select Country"
+                  searchPlaceholder="Search"
                 />
               </View>
             </View>

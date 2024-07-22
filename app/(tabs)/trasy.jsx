@@ -473,12 +473,23 @@ const trasy = () => {
                 </Text>
                 <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
               </View>
-              <View style={{ marginTop: hp(1) }}>
+              <View
+                style={{
+                  marginTop: hp(1),
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 6,
+                }}
+              >
                 <SelectList
                   setSelected={handleAccessChange}
                   data={accessOptions}
                   save="key"
                   defaultOption={accessOptions[0]}
+                  boxStyles={{ borderWidth: 0 }}
+                  dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
+                  inputStyles={{ color: "black" }}
+                  placeholder="Select Access"
                 />
               </View>
             </View>
@@ -492,12 +503,24 @@ const trasy = () => {
                 </Text>
                 <Text style={{ color: "red", marginRight: wp(2) }}>*</Text>
               </View>
-              <View style={{ marginTop: hp(1) }}>
+              <View
+                style={{
+                  marginTop: hp(1),
+                  borderWidth: 1,
+                  borderColor: "#FFD800",
+                  borderRadius: 6,
+                }}
+              >
                 <SelectList
                   setSelected={handleCountryChange}
                   data={countries}
                   save="key"
                   defaultOption={countries[0]}
+                  boxStyles={{ borderWidth: 0 }}
+                  dropdownStyles={{ borderColor: "#FFD800", borderWidth: 0 }}
+                  inputStyles={{ color: "black" }}
+                  placeholder="Select Country"
+                  searchPlaceholder="Search"
                 />
               </View>
             </View>
