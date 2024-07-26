@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
 import { useSelector } from "react-redux";
@@ -41,7 +49,7 @@ const EventDetail = () => {
     return <Text>Loading...</Text>;
   }
 
-  const { title, image, description, coordinates, map, date } = event;
+  const { title, image, description, coordinates, map, date, section } = event;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -53,21 +61,17 @@ const EventDetail = () => {
       />
 
       <Text style={styles.description}>{description}</Text>
+      <Text style={styles.description}>{section.main}</Text>
+      <Text style={styles.description}>{section.sub}</Text>
       <Text>Location:</Text>
       {coordinates && coordinates.length === 2 && (
         <MapComponent latitude={coordinates[0]} longitude={coordinates[1]} />
       )}
 
       {map && map.trim() !== "" && (
-        <Image
-          source={{ uri: map }}
-          style={{
-            width: wp(80),
-            height: wp(50),
-            borderRadius: 10,
-            marginVertical: 10,
-          }}
-        />
+        <TouchableOpacity onPress={() => Linking.openURL(map)}>
+          <Text style={styles.mapLink}>Map Link</Text>
+        </TouchableOpacity>
       )}
     </ScrollView>
   );
@@ -95,6 +99,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginBottom: 20,
+  },
+  mapLink: {
+    fontSize: 16,
+    color: "blue",
+    textDecorationLine: "underline",
+    marginVertical: 10,
   },
 });
 

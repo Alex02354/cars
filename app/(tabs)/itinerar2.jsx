@@ -12,36 +12,39 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Events from "../../components/Events";
+import Constants from "expo-constants";
 
 const Itinerar2 = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
 
   const renderHeader = () => (
     <>
-      <Image
-        source={require("@/assets/images/header.jpg")}
-        style={{
-          width: wp(100),
-          height: wp(37),
-          resizeMode: "contain",
-          marginTop: "6%",
-        }}
-      />
-      <View style={{ marginHorizontal: "11%" }}>
-        <View
+      <View style={styles.wrapper}>
+        <Image
+          source={require("@/assets/images/header.jpg")}
           style={{
-            alignItems: "center",
-            justifyContent: "center",
+            width: wp(100),
+            height: wp(37),
+            resizeMode: "contain",
+            marginTop: "0%",
           }}
-        >
-          <Image
-            source={require("@/assets/images/itineraries.png")}
+        />
+        <View style={{ marginHorizontal: "11%" }}>
+          <View
             style={{
-              width: wp(55),
-              height: wp(30),
-              resizeMode: "contain",
+              alignItems: "center",
+              justifyContent: "center",
             }}
-          />
+          >
+            <Image
+              source={require("@/assets/images/itineraries.png")}
+              style={{
+                width: wp(55),
+                height: wp(30),
+                resizeMode: "contain",
+              }}
+            />
+          </View>
         </View>
       </View>
     </>
@@ -112,6 +115,9 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   activeText: { color: "#FFD800" },
+  wrapper: {
+    paddingTop: Constants.statusBarHeight,
+  },
 });
 
 export default Itinerar2;

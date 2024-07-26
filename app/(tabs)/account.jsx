@@ -15,6 +15,7 @@ import {
 import Events from "../../components/Events";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useSelector } from "react-redux";
+import Constants from "expo-constants";
 
 const Account = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
@@ -23,16 +24,18 @@ const Account = () => {
   return (
     <>
       <StatusBar backgroundColor="black" barStyle="light-content" />
-      <Image
-        source={require("@/assets/images/header.jpg")}
-        style={{
-          width: wp(100),
-          height: wp(37),
-          resizeMode: "contain",
-          marginTop: "6%",
-          marginBottom: "3%",
-        }}
-      />
+      <View style={styles.wrapper}>
+        <Image
+          source={require("@/assets/images/header.jpg")}
+          style={{
+            width: wp(100),
+            height: wp(37),
+            resizeMode: "contain",
+            marginTop: "0%",
+            marginBottom: "3%",
+          }}
+        />
+      </View>
       <Events currentUserId={user._id} showAddEventButton={false} />
       <StatusBar style="auto" />
     </>
@@ -68,6 +71,9 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   activeText: { color: "#FFD800" },
+  wrapper: {
+    paddingTop: Constants.statusBarHeight,
+  },
 });
 
 export default Account;

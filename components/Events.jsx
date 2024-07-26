@@ -90,7 +90,7 @@ const Events = ({
       ? event.country === selectedCountry
       : true;
     const sectionMatches = selectedSection
-      ? event.section === selectedSection
+      ? event.section.main === selectedSection
       : true;
     return countryMatches && sectionMatches;
   });
@@ -248,7 +248,7 @@ const Events = ({
           <Ionicons name="filter" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      {/* {showAddEventButton && (
+      {showAddEventButton && (
         <TouchableOpacity
           style={{
             backgroundColor: "#FFD800",
@@ -266,7 +266,7 @@ const Events = ({
           <MaterialIcons name="add-circle-outline" size={24} color="black" />
           <Text style={{ color: "black", fontWeight: "bold" }}>Add Event</Text>
         </TouchableOpacity>
-      )} */}
+      )}
       <FlatList
         data={filteredEvents}
         numColumns={2}
@@ -398,7 +398,7 @@ const EventCard = ({ item, index }) => {
           )}
         </View>
         <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
-          Section: {item.section}
+          Section: {item.section.main}
         </Text>
         <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
           Country: {item.country}

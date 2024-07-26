@@ -134,23 +134,42 @@ const Profile = () => {
   };
 
   const handleDeleteAccount = async () => {
-    try {
-      dispatch(deleteUserStart());
-      const res = await fetch(
-        `https://moto-app.onrender.com/api/user/delete/${currentUser._id}`,
+    Alert.alert(
+      "Delete Account",
+      "Do you really want to delete your account?",
+      [
         {
-          method: "DELETE",
-        }
-      );
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(deleteUserFailure(data));
-        return;
-      }
-      dispatch(deleteUserSuccess(data));
-    } catch (error) {
-      dispatch(deleteUserFailure(error));
-    }
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              dispatch(deleteUserStart());
+              const res = await fetch(
+                `https://moto-app.onrender.com/api/user/delete/${currentUser._id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              const data = await res.json();
+              if (data.success === false) {
+                dispatch(deleteUserFailure(data));
+                return;
+              }
+              dispatch(deleteUserSuccess(data));
+              dispatch(signOut());
+              router.push("/"); // Redirect to the home page after successful deletion
+            } catch (error) {
+              dispatch(deleteUserFailure(error));
+            }
+          },
+          style: "destructive",
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   const handleSignOut = async () => {
@@ -228,6 +247,7 @@ const Profile = () => {
               <Text style={styles.signOutText}>Sign out</Text>
             </TouchableOpacity>
           </View>
+
           {error && <Text style={styles.errorText}>Something went wrong!</Text>}
           {updateSuccess && (
             <Text style={styles.successText}>

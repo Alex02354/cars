@@ -15,6 +15,7 @@ import {
 import Events from "../../../components/Events";
 import AddEventModal from "../../../components/AddEventModal"; // Adjust the path as per your project structure
 import { useRouter } from "expo-router";
+import Constants from "expo-constants";
 
 const HomeScreen = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
@@ -29,49 +30,51 @@ const HomeScreen = () => {
   const renderHeader = () => (
     <>
       <StatusBar backgroundColor="black" barStyle="light-content" />
-      <Image
-        source={require("@/assets/images/header.jpg")}
-        style={{
-          width: wp(100),
-          height: wp(37),
-          resizeMode: "contain",
-          marginTop: "6%",
-        }}
-      />
-      <View style={{ marginHorizontal: "11%" }}>
-        <View
-          style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              handleTabPress("TRASY");
-              router.push({ pathname: "/objavit" });
-            }}
+      <View style={styles.wrapper}>
+        <Image
+          source={require("@/assets/images/header.jpg")}
+          style={{
+            width: wp(100),
+            height: wp(37),
+            resizeMode: "contain",
+            marginTop: "0%",
+          }}
+        />
+        <View style={{ marginHorizontal: "11%" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
           >
-            <Image
-              source={require("@/assets/images/discover.png")}
-              style={{
-                width: wp(45),
-                height: wp(30),
-                resizeMode: "contain",
+            <TouchableOpacity
+              onPress={() => {
+                handleTabPress("TRASY");
+                router.push({ pathname: "/objavit" });
               }}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              handleTabPress("TRASY");
-              router.push({ pathname: "/pridat" });
-            }}
-          >
-            <Image
-              source={require("@/assets/images/ADD.png")}
-              style={{
-                width: wp(41),
-                height: wp(29),
-                resizeMode: "contain",
+            >
+              <Image
+                source={require("@/assets/images/discover.png")}
+                style={{
+                  width: wp(45),
+                  height: wp(30),
+                  resizeMode: "contain",
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                handleTabPress("TRASY");
+                router.push({ pathname: "/pridat" });
               }}
-            />
-          </TouchableOpacity>
+            >
+              <Image
+                source={require("@/assets/images/ADD.png")}
+                style={{
+                  width: wp(41),
+                  height: wp(29),
+                  resizeMode: "contain",
+                }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       <StatusBar style="auto" />
@@ -141,6 +144,9 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   activeText: { color: "#FFD800" },
+  wrapper: {
+    paddingTop: Constants.statusBarHeight,
+  },
 });
 
 export default HomeScreen;

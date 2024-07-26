@@ -13,6 +13,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import Events from "../../components/Events";
+import Constants from "expo-constants";
 
 const Settings = () => {
   const [selectedTab, setSelectedTab] = useState("ALL");
@@ -20,16 +21,18 @@ const Settings = () => {
   return (
     <>
       <StatusBar backgroundColor="black" barStyle="light-content" />
-      <Image
-        source={require("@/assets/images/header.jpg")}
-        style={{
-          width: wp(100),
-          height: wp(37),
-          resizeMode: "contain",
-          marginTop: "6%",
-          marginBottom: "3%",
-        }}
-      />
+      <View style={styles.wrapper}>
+        <Image
+          source={require("@/assets/images/header.jpg")}
+          style={{
+            width: wp(100),
+            height: wp(37),
+            resizeMode: "contain",
+            marginTop: "0%",
+            marginBottom: "3%",
+          }}
+        />
+      </View>
       <Events />
 
       <StatusBar style="auto" />
@@ -65,6 +68,9 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   activeText: { color: "#FFD800" },
+  wrapper: {
+    paddingTop: Constants.statusBarHeight,
+  },
 });
 
 export default Settings;
