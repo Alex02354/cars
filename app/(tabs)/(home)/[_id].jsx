@@ -16,6 +16,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { Foundation } from "@expo/vector-icons";
 
 const EventDetail = () => {
   const { _id } = useLocalSearchParams();
@@ -57,19 +58,23 @@ const EventDetail = () => {
       <Text style={styles.title}>{date}</Text>
       <Image
         source={{ uri: image }}
-        style={{ width: wp(80), height: wp(50), borderRadius: 10 }}
+        style={{ width: wp(80), height: wp(70), borderRadius: 10 }}
       />
 
       <Text style={styles.description}>{description}</Text>
-      <Text style={styles.description}>{section.main}</Text>
-      <Text style={styles.description}>{section.sub}</Text>
-      <Text>Location:</Text>
+      <Text style={{ fontWeight: "500" }}>
+        Section: {section.main} {section.sub}
+      </Text>
       {coordinates && coordinates.length === 2 && (
         <MapComponent latitude={coordinates[0]} longitude={coordinates[1]} />
       )}
 
       {map && map.trim() !== "" && (
-        <TouchableOpacity onPress={() => Linking.openURL(map)}>
+        <TouchableOpacity
+          style={styles.mapButton}
+          onPress={() => Linking.openURL(map)}
+        >
+          <Foundation name="map" size={24} color="black" />
           <Text style={styles.mapLink}>Map Link</Text>
         </TouchableOpacity>
       )}
@@ -97,14 +102,24 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
-    textAlign: "center",
-    marginBottom: 20,
+    textAlign: "justify",
+    marginVertical: 20,
   },
   mapLink: {
     fontSize: 16,
-    color: "blue",
+    color: "black",
     textDecorationLine: "underline",
-    marginVertical: 10,
+    fontWeight: "500",
+    padding: 5,
+  },
+  mapButton: {
+    borderRadius: 8,
+    borderWidth: 0,
+    margin: 20,
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFD800",
   },
 });
 

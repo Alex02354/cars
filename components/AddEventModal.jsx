@@ -212,6 +212,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
         favourite: false, // Reset favourite to false
         file: "", // Reset file
       }); // Clear form data and reset to default country
+      setImage(null); // Clear the image state
     } catch (err) {
       setError(err.message);
     } finally {
@@ -266,89 +267,6 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
           <ScrollView contentContainerStyle={styles.scrollViewContent}>
             <Text style={styles.modalText}>Add New Event</Text>
             {error && <Text style={styles.errorText}>{error}</Text>}
-            <TextInput
-              style={styles.input}
-              placeholder="Title"
-              value={eventData.title}
-              onChangeText={(text) => handleChange("title", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Description"
-              value={eventData.description}
-              onChangeText={(text) => handleChange("description", text)}
-              multiline
-            />
-            <TouchableOpacity onPress={handleImagePick} style={styles.button}>
-              <Text style={styles.buttonText}>Pick an image</Text>
-            </TouchableOpacity>
-            {image && (
-              <>
-                <Image
-                  source={{ uri: image }}
-                  style={{
-                    width: 100,
-                    height: 100,
-                    resizeMode: "contain",
-                    marginTop: 10,
-                  }}
-                />
-                {imageError ? (
-                  <Text style={styles.errorText}>Error uploading image</Text>
-                ) : imagePercent > 0 && imagePercent < 100 ? (
-                  <Text style={styles.uploadText}>
-                    Uploading image: {imagePercent}%
-                  </Text>
-                ) : imagePercent === 100 ? (
-                  <Text style={styles.uploadText}>
-                    Image uploaded successfully
-                  </Text>
-                ) : null}
-              </>
-            )}
-            <TouchableOpacity onPress={handleFilePick} style={styles.button}>
-              <Text style={styles.buttonText}>Pick a file</Text>
-            </TouchableOpacity>
-            {file && (
-              <>
-                <Text style={{ marginTop: 10 }}>{file.split("/").pop()}</Text>
-                {fileError ? (
-                  <Text style={styles.errorText}>Error uploading file</Text>
-                ) : filePercent > 0 && filePercent < 100 ? (
-                  <Text style={styles.uploadText}>
-                    Uploading file: {filePercent}%
-                  </Text>
-                ) : filePercent === 100 ? (
-                  <Text style={styles.uploadText}>
-                    File uploaded successfully
-                  </Text>
-                ) : null}
-              </>
-            )}
-            <TextInput
-              style={styles.input}
-              placeholder="Map URL"
-              value={eventData.map}
-              onChangeText={(text) => handleChange("map", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Coordinates (comma-separated)"
-              value={eventData.coordinates}
-              onChangeText={(text) => handleChange("coordinates", text)}
-            />
-            <TouchableOpacity style={styles.input} onPress={showDatePicker}>
-              <Text>
-                {eventData.date ? eventData.date.toString() : "Select Date"}
-              </Text>
-            </TouchableOpacity>
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleConfirmDate}
-              onCancel={hideDatePicker}
-            />
-
             <View style={styles.pickerContainer}>
               <Text style={styles.pickerLabel}>Section:</Text>
               <Picker
@@ -419,20 +337,128 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
                 ))}
               </Picker>
             </View>
+            <View style={styles.pickerContainer}>
+              <Text style={styles.pickerLabel}>Access Level:</Text>
+              <Picker
+                selectedValue={eventData.access}
+                style={styles.picker}
+                onValueChange={(itemValue) => handleChange("access", itemValue)}
+              >
+                <Picker.Item label="Caravan" value={0} />
+                <Picker.Item label="Car" value={1} />
+                <Picker.Item label="Off-road" value={2} />
+              </Picker>
+            </View>
+
+            <TextInput
+              style={styles.input}
+              placeholder="Title"
+              value={eventData.title}
+              onChangeText={(text) => handleChange("title", text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Description"
+              value={eventData.description}
+              onChangeText={(text) => handleChange("description", text)}
+              multiline
+            />
+            <TouchableOpacity onPress={handleImagePick} style={styles.button}>
+              <Text style={styles.buttonText}>Pick an image</Text>
+            </TouchableOpacity>
+            {image && (
+              <>
+                <Image
+                  source={{ uri: image }}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    resizeMode: "contain",
+                    marginTop: 10,
+                  }}
+                />
+                {imageError ? (
+                  <Text style={styles.errorText}>Error uploading image</Text>
+                ) : imagePercent > 0 && imagePercent < 100 ? (
+                  <Text style={styles.uploadText}>
+                    Uploading image: {imagePercent}%
+                  </Text>
+                ) : imagePercent === 100 ? (
+                  <Text style={styles.uploadText}>
+                    Image uploaded successfully
+                  </Text>
+                ) : null}
+              </>
+            )}
+            <TouchableOpacity onPress={handleFilePick} style={styles.button}>
+              <Text style={styles.buttonText}>Pick a file</Text>
+            </TouchableOpacity>
+            {file && (
+              <>
+                <Text style={{ marginTop: 10 }}>{file.split("/").pop()}</Text>
+                {fileError ? (
+                  <Text style={styles.errorText}>Error uploading file</Text>
+                ) : filePercent > 0 && filePercent < 100 ? (
+                  <Text style={styles.uploadText}>
+                    Uploading file: {filePercent}%
+                  </Text>
+                ) : filePercent === 100 ? (
+                  <Text style={styles.uploadText}>
+                    File uploaded successfully
+                  </Text>
+                ) : null}
+              </>
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder="MAP/ITINERARY URL"
+              value={eventData.map}
+              onChangeText={(text) => handleChange("map", text)}
+            />
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor:
+                    eventData.section.main === "route" ||
+                    eventData.section.main === "itinerary"
+                      ? "#d3d3d3"
+                      : "white",
+                },
+              ]}
+              placeholder="Coordinates"
+              value={eventData.coordinates}
+              onChangeText={(text) => handleChange("coordinates", text)}
+              editable={
+                eventData.section.main !== "route" &&
+                eventData.section.main !== "itinerary"
+              }
+            />
+            <TouchableOpacity style={styles.input} onPress={showDatePicker}>
+              <Text>
+                {eventData.date ? eventData.date.toString() : "Select Date"}
+              </Text>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirmDate}
+              onCancel={hideDatePicker}
+            />
           </ScrollView>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={[styles.button, styles.buttonClose]}
               onPress={handleClear}
             >
-              <Text style={styles.buttonText}>Clear</Text>
+              <Text style={styles.buttonText2}>Clear</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.buttonSubmit]}
               onPress={handleSubmit}
               disabled={isSubmitting}
             >
-              <Text style={styles.buttonText}>
+              <Text style={styles.buttonText2}>
                 {isSubmitting ? "Submitting..." : "Submit"}
               </Text>
             </TouchableOpacity>
@@ -440,7 +466,7 @@ const AddEventModal = ({ modalVisible, setModalVisible, addEventToList }) => {
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(false)}
             >
-              <Text style={styles.buttonText}>Cancel</Text>
+              <Text style={styles.buttonText2}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -488,13 +514,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   button: {
-    backgroundColor: "#2196F3",
-    borderRadius: 10,
+    backgroundColor: "#FFD800",
+    borderRadius: 5,
     padding: 10,
     margin: 10,
     elevation: 2,
   },
   buttonText: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  buttonText2: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
@@ -514,16 +545,18 @@ const styles = StyleSheet.create({
     color: "red",
   },
   pickerContainer: {
-    width: "100%",
+    width: "90%",
     alignItems: "center",
     marginVertical: 10,
+    borderWidth: 1,
+    borderRadius: 5,
   },
   pickerLabel: {
     marginBottom: 5,
   },
   picker: {
-    width: 200,
-    height: 40,
+    width: 270,
+    height: 70,
   },
   uploadText: {
     marginTop: 10,

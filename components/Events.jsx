@@ -33,6 +33,7 @@ const Events = ({
   currentUserId,
   showAddEventButton,
   filterSection,
+  filterSubSection,
   hideSectionFilters,
 }) => {
   const [events, setEvents] = useState([]);
@@ -42,8 +43,11 @@ const Events = ({
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedSection, setSelectedSection] = useState(filterSection);
+  const [selectedSubSection, setSelectedSubSection] =
+    useState(filterSubSection);
   const [selectedTab, setSelectedTab] = useState("ALL");
   const [refreshing, setRefreshing] = React.useState(false);
+
   const handleTabPress = (tabName) => {
     setSelectedTab(tabName);
   };
@@ -92,7 +96,10 @@ const Events = ({
     const sectionMatches = selectedSection
       ? event.section.main === selectedSection
       : true;
-    return countryMatches && sectionMatches;
+    const subSectionMatches = selectedSubSection
+      ? event.section.sub === selectedSubSection
+      : true;
+    return countryMatches && sectionMatches && subSectionMatches;
   });
 
   if (loading) return <ActivityIndicator />;
@@ -115,6 +122,7 @@ const Events = ({
               style={[styles.button, selectedTab === "ALL" && styles.activeTab]}
               onPress={() => {
                 setSelectedSection(null);
+                setSelectedSubSection(null);
                 handleTabPress("ALL");
               }}
             >
@@ -134,6 +142,7 @@ const Events = ({
               ]}
               onPress={() => {
                 setSelectedSection("itinerary");
+                setSelectedSubSection(null);
                 handleTabPress("ITINERARY");
               }}
             >
@@ -153,6 +162,7 @@ const Events = ({
               ]}
               onPress={() => {
                 setSelectedSection("places");
+                setSelectedSubSection(null);
                 handleTabPress("PLACES");
               }}
             >
@@ -182,6 +192,7 @@ const Events = ({
               ]}
               onPress={() => {
                 setSelectedSection("camp");
+                setSelectedSubSection(null);
                 handleTabPress("KEMP");
               }}
             >
@@ -201,6 +212,7 @@ const Events = ({
               ]}
               onPress={() => {
                 setSelectedSection("route");
+                setSelectedSubSection(null);
                 handleTabPress("OFFROAD");
               }}
             >
@@ -400,6 +412,9 @@ const EventCard = ({ item, index }) => {
         <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
           Section: {item.section.main}
         </Text>
+        {/* <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
+          Subsection: {item.section.sub}
+        </Text> */}
         <Text style={{ fontSize: hp(1.4), fontWeight: "bold" }}>
           Country: {item.country}
         </Text>

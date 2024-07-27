@@ -165,6 +165,62 @@ export default function TabLayout() {
           headerShown: false,
         }}
       />
+      <Tabs.Screen
+        name="built"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="views"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="nature"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="natural"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="created"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="caravan"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="offroad"
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          headerShown: false,
+        }}
+      />
     </Tabs>
   );
 }
