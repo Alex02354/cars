@@ -20,6 +20,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 // Mapping of country names to actual image paths
 const countryImages = {
@@ -47,6 +48,7 @@ const Events = ({
     useState(filterSubSection);
   const [selectedTab, setSelectedTab] = useState("ALL");
   const [refreshing, setRefreshing] = React.useState(false);
+  const router = useRouter();
 
   const handleTabPress = (tabName) => {
     setSelectedTab(tabName);
@@ -107,6 +109,59 @@ const Events = ({
 
   return (
     <View style={{ flex: 1 }}>
+      {showAddEventButton && (
+        <>
+          <View style={{ marginHorizontal: "11%" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                gap: 0,
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  borderRadius: 5,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => {
+                  handleTabPress("TRASY");
+                  router.push({ pathname: "/objavit" });
+                }}
+              >
+                <Image
+                  source={require("@/assets/images/discover.png")}
+                  style={{
+                    width: wp(45),
+                    height: wp(30),
+                    resizeMode: "contain",
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  padding: 10,
+                  borderRadius: 5,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => setModalVisible(true)}
+              >
+                <Image
+                  source={require("@/assets/images/ADD.png")}
+                  style={{
+                    width: wp(41),
+                    height: wp(29),
+                    resizeMode: "contain",
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </>
+      )}
       {!hideSectionFilters && (
         <>
           <View
@@ -260,25 +315,7 @@ const Events = ({
           <Ionicons name="filter" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      {showAddEventButton && (
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#FFD800",
-            marginHorizontal: "11%",
-            padding: 10,
-            borderRadius: 5,
-            margin: 15,
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "center",
-            gap: 15,
-          }}
-          onPress={() => setModalVisible(true)}
-        >
-          <MaterialIcons name="add-circle-outline" size={24} color="black" />
-          <Text style={{ color: "black", fontWeight: "bold" }}>Add Event</Text>
-        </TouchableOpacity>
-      )}
+
       <FlatList
         data={filteredEvents}
         numColumns={2}

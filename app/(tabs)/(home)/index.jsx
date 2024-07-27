@@ -40,42 +40,6 @@ const HomeScreen = () => {
             marginTop: "0%",
           }}
         />
-        <View style={{ marginHorizontal: "11%" }}>
-          <View
-            style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                handleTabPress("TRASY");
-                router.push({ pathname: "/objavit" });
-              }}
-            >
-              <Image
-                source={require("@/assets/images/discover.png")}
-                style={{
-                  width: wp(45),
-                  height: wp(30),
-                  resizeMode: "contain",
-                }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                handleTabPress("TRASY");
-                router.push({ pathname: "/pridat" });
-              }}
-            >
-              <Image
-                source={require("@/assets/images/ADD.png")}
-                style={{
-                  width: wp(41),
-                  height: wp(29),
-                  resizeMode: "contain",
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
       </View>
       <StatusBar style="auto" />
     </>
